@@ -114,7 +114,7 @@ class NeuMaticController extends Base\BaseController {
     public function getNeuCollectionCookbookVersionsAction() {
         $versions = array();
         foreach ($this->_config['gitProjectIds'] as $cbName => $projectId) {
-            $url = "https://git.nexgen.neustar.biz/api/v3/projects/{$projectId}/repository/tags?private_token=F36UfqQSqmFGKyeifxsu";
+            $url = "https://git.nexgen.neustar.biz/api/v3/projects/{$projectId}/repository/tags?private_token=";
             $json = $this->curlGetUrl($url);
             $tags = array();
             foreach ($json as $v) {
