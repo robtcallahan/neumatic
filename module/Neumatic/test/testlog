@@ -1,0 +1,12 @@
+PHPUnit 4.0.17 by Sebastian Bergmann.
+
+You have installed PHPUnit via PEAR. This installation method is no longer
+supported and http://pear.phpunit.de/ will be shut down no later than
+December, 31 2014.
+
+Please read http://phpunit.de/manual/current/en/installation.html and
+learn how to use PHPUnit from a PHAR or install it via Composer.
+
+Configuration read from /var/www/html/neumatic/module/Neumatic/test/phpunit.xml
+
+testIndexActionCanBeAccessed/var/www/html/neumatic/cache/s_mkelle/Chef/stopcdvvcm01.va.neustar.com/index

@@ -1,0 +1,163 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top">
+
+    <!-- Function Buttons -->
+    <div class="row">
+        <div class="col-lg-12 editServerHeading">
+            <div class="col-lg-6 collapse navbar-collapse" style="float:right;">
+                <form class="navbar-form navbar-right" role="form">
+                    <div>
+                        <button class="btn btn-success"
+                                style="font-size:18px !important;"
+                                ng-click="buttonRun()"
+                                ng-disabled="isRunning"
+                                tooltip-placement="bottom">Run
+                                <!-- disabling this tooltip because when I click on the button
+                                     the tooltip stays on screen. Don't know why.
+                                     tooltip="Run bootstrap on servers listed"-->
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6 collapse navbar-collapse" style="float:right;">
+                <span class="serverStatus">{{runStatusText}}
+                    <img id="mask-spinner" ng-show="isRunning" class="mask-spinner" src="../images/spinner-clock-blue.gif"/>
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Bootstrap a Set of Hosts to a Chef Server</h2>
+
+    <div class="row">
+
+        <div class="{{rowClass}}" ng-show="showRunForm">
+
+            <h3>Chef Configuration</h3>
+            <hr>
+
+            <!-- Chef Server -->
+            <div class="form-group">
+                <label for="chefServer" class="{{labelClass}} control-label">Chef Server</label>
+
+                <div class="{{inputClass}}">
+                    <select class="form-control" id="chefServer" ng-model="chefServer"
+                            ng-disabled="authedUserService.authedUser.userType !== 'Admin'"
+                            ng-options="s.displayValue for s in chefServers"
+                            ng-change="chefServerSelected()"></select>
+                </div>
+            </div>
+
+            <!-- Chef Role -->
+            <div class="form-group">
+                <label for="chefRole" class="{{labelClass}} control-label">Chef Role</label>
+
+                <div class="{{inputClass}}">
+                    <select class="form-control" id="chefRole" ng-model="chefRole"
+                            ng-options="role for role in chefRoles"
+                            ng-change="chefRoleSelected()"></select>
+                </div>
+            </div>
+
+            <!-- Chef Environment -->
+            <div class="form-group">
+                <label for="chefEnv" class="{{labelClass}} control-label">Chef Env</label>
+
+                <div class="{{inputClass}}">
+                    <select class="form-control" id="chefEnv" ng-model="chefEnv"
+                            ng-options="env.name for env in chefEnvs"
+                            ng-change="chefEnvSelected()"></select>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 150px;">User Credentials</h3>
+            <hr>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username" class="{{labelClass}} control-label">Username</label>
+
+                <div class="{{inputClass}}">
+                    <input class="form-control"
+                           id="username"
+                           ng-model="username"
+                           required>
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password" class="{{labelClass}} control-label">Password</label>
+
+                <div class="{{inputClass}}">
+                    <input class="form-control"
+                           id="password"
+                           type="password"
+                           ng-model="password"
+                           required>
+                </div>
+            </div>
+
+            <!-- Password validation -->
+            <div class="form-group">
+                <label for="passwordCompare" class="{{labelClass}} control-label">Re-Enter Passwd</label>
+
+                <div class="{{inputClass}}">
+                    <input class="form-control"
+                           id="passwordCompare"
+                           type="password"
+                           ng-model="passwordCompare"
+                           ng-blur="checkPassword()"
+                           required>
+                </div>
+            </div>
+            <div ng-show="!passwordsMatch()" style="color: red;">The passwords do not match</div>
+
+            <h3 style="margin-top: 150px;">Host List</h3>
+            <hr>
+            <div class="form-group">
+                <label for="hostList"
+                       class="col-lg-3 control-label">&nbsp;</label>
+
+                <div class="col-lg-9">
+                    <textarea rows="10"
+                              cols="60"
+                              class="form-control"
+                              id="hostList"
+                              ng-model="hostList"
+                              ng-required="true"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="{{rowClass}}" ng-show="showRunList">
+            <h3>Run Status</h3>
+            <hr>
+            <table width="100%">
+                <tr ng-repeat="host in hosts">
+                    <td width="300px">{{host.name}}</td>
+                    <td width="30px">
+                        <img src="../images/ajax-loader-small.gif" width=28 height=28 ng-show="host.running">
+                    </td>
+                    <td>{{host.status}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="{{rowClass}}" ng-show="hasOutput">
+            <h3>Command Output</h3>
+            <hr>
+
+            <pre style="height:600px;overflow-y:scroll;" bind-html-unsafe="output">
+            </pre>
+        </div>
+
+    </div>
+
+    <hr>
+    <footer></footer>
+</div>

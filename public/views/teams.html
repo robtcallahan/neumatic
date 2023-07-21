@@ -1,0 +1,30 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <h2 style="margin: 20px 0;">Admin: Teams</h2>
+
+    <table-pager input="teams" output="pagedData" predicate="predicate" reverse="reverse"></table-pager>
+
+    <table class="table">
+        <tr>
+            <th>&nbsp;</th>
+            <th><a href="" ng-click="predicate = 'name'; reverse = !reverse;">Team Name</a></th>
+            <th><a href="" ng-click="predicate = 'owner'; reverse = !reverse;">Owner Name</a></th>
+            <th><a href="" ng-click="predicate = 'owner'; reverse = !reverse;">Owner EMail</a></th>
+            <th><a href="" ng-click="predicate = 'owner'; reverse = !reverse;">Owner Username</a></th>
+        </tr>
+        <tr ng-repeat="team in pagedData">
+            <td>{{$index + 1}}</td>
+            <td><!--suppress HtmlUnknownAnchorTarget -->
+                <a href="/#/teams/{{team.id}}">{{team.name}}</a></td>
+            <td>{{team.ownerLastName}}, {{team.ownerFirstName}}</td>
+            <td>{{team.ownerEmail}}</td>
+            <td>{{team.ownerUsername}}</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

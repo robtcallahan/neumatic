@@ -1,0 +1,544 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top" style="width:1024px;">
+	<div >
+		
+		
+		<div style="width:1024px;">	
+			<div id="environmentTitleContainer" ng-show="{{environmentTitleShow}}">
+				<h3>Environment: {{environmentName}}</h3>
+				<br>
+			</div>
+			<hr />
+			<div id="environmentsButtons" style=" float: right; margin-right: 100px; margin-top: 20px;">
+				<button class="btn btn-success"
+		            ng-disabled="!authedUser.adminOn && !environment.authorized && !newEnvironment"
+		            tooltip-placement="bottom"
+		            tooltip="Save this environment"
+		            ng-click="saveEnvironment()">Save
+		        </button>
+		        <button class="btn btn-success"
+		            ng-show="environment.name != new"
+		            ng-disabled="!authedUser.adminOn && !environment.authorized"
+		            tooltip-placement="bottom"
+		            tooltip="Save this environment"
+		            ng-click="showCopyEnvironmentOverlayBox()">Copy
+		        </button>
+		        <button class="btn btn-success"
+		            tooltip-placement="bottom"
+		            tooltip="Return to previous page"
+		            ng-click="back()">Back
+		       </button>
+			</div>
+		</div>
+	</div>
+	<br /><br />
+	
+	
+	<div>
+    
+	 
+	    
+	    <div class="row">
+	        <div class="{{rowClass}}">
+	
+				<form name="environmentForm" novalidate role="form">
+					
+				
+	            <div class="environmentFormFieldContainer">
+	                <label for="environmentName"  class="environmentFormFieldLabel">Name</label>
+	
+	                <div class="environmentFormField">
+	                    <input class="form-control" ng-model="environmentName" ng-disabled="environmentNameInputDisabled" value="{{environmentName}}" required>
+	                </div>
+	            </div>
+	            <div class="environmentFormFieldContainer">
+	                <label for="environmentDescription" class="environmentFormFieldLabel">Description</label>
+	
+	                <div class="environmentFormField">
+	                    <textarea class="form-control" ng-model="environmentDescription">{{environmentDescription}}</textarea>
+	                </div>
+	            </div>
+	            <br />
+	            <div class="environmentFormFieldContainer">
+	                <label for="ownerGroup" class="environmentFormFieldLabel">Owner Group *</label>
+	
+	                <div class="environmentFormField">
+	                    <select class="form-control" id="ownerGroups" ng-model="ownerGroupSelected" required ng-options="ownerGroup for ownerGroup in ownerGroups">
+	                        <option value="">-- Select Owner Group --</option>
+	                    </select><div ng-Show="ownerGroupsLoading" id="ownerGroupsLoading" >loading...</div>
+	                </div>
+	            </div>
+	            
+	            <div class="environmentFormFieldContainer">
+	                <label for="businessService" class="environmentFormFieldLabel">Business Service *</label>
+	
+	                <div class="environmentFormField">
+	                    <select class="form-control" id="businessServices" ng-model="businessServiceSelected" required ng-options="bs.name for bs in businessServices">
+	                        <option value="">-- Select Business Service --</option>
+	                    </select><div ng-Show="businessServiceLoading" id="environmentFormLoading" >loading...{{businessServiceSelected}}</div>
+	                </div>
+	            </div>
+	            
+	            
+	            <div class="environmentFormFieldContainer">
+	                <label for="subsystem" class="environmentFormFieldLabel">Subsystem</label>
+	
+	                <div class="environmentFormField">
+	                    <select class="form-control" id="subsystems" ng-model="subsystemSelected" required ng-options="sub.name for sub in subsystems">
+	                        <option value="">-- Select Subsystem --</option>
+	                    </select><div ng-Show="subsystemLoading" id="environmentFormLoading" >loading...</div>
+	
+	                </div>
+	            </div>
+	            
+	            
+	            <div class="environmentFormFieldContainer">
+	                <label for="subsystem" class="environmentFormFieldLabel">Timezone</label>
+	
+	                <div class="environmentFormField">
+	                    <select class="form-control" id="timezones" ng-model="timezoneSelected" required ng-options="tz for tz in timezones">
+	                        <option value="">-- Select Timezone --</option>
+	                        
+	                    </select><div ng-Show="timezoneLoading" id="environmentFormLoading" >loading...</div>
+	                    
+	                </div>
+	            </div>
+	            
+	            
+	            <div class="environmentFormFieldContainer">
+	                <label for="subsystem" class="environmentFormFieldLabel">Location</label>
+	
+	                <div class="environmentFormField">
+	                    <select class="form-control" id="locations" ng-model="locationSelected" required ng-options="loc.name for loc in locations">
+	                        <option value="">-- Select Location --</option>
+	                    </select><div ng-Show="locationLoading" id="environmentFormLoading" >loading...</div>
+	                    
+	                </div>
+	            </div>
+	                
+	           </form>
+	        </div>
+	       
+	    </div>
+	   
+	   
+	   
+	   
+	    <div id="environmentVersionConstraintsContainer" ng-show="{{environmentVersionsShow}}">
+		<hr>
+			<div style="width:1024px;">
+				<div style="float: left; width: 400px;">
+				    <h4>Cookbook Version Constraints &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<a href="/#/environments/editCookbookVersion/{{environment.name}}/new">
+				    	<button class="btn btn-success" 
+				    	ng-disabled="!authedUser.adminOn && !environment.authorized"
+				    	>&nbsp; Add &nbsp;</button></a></h4> 
+				</div>
+				<div style="float: right; width:340px; margin-top: 10px;">
+				 * Version constraints are saved immediately
+				</div>
+			</div>
+			<table style=" " class="table" >
+				<tr>
+					<th style="text-align: center">Name</th>
+					<th style="text-align: center">Operator</th>
+					<th style="text-align: center">Version</th>
+					<th style="text-align: center">Actions</th>	
+				</tr>
+				
+			<tbody ng-repeat="(name, version) in environment_cookbook_versions">
+				<tr>
+					<td style="width: 150px; ">{{name}}</td>
+					<td style="width: 100px; text-align: center; ">{{version.operator}}</td>
+					<td style="width: 100px; text-align: center;">{{version.version}}</td>
+					<td style="width: 170px;  text-align: center;">
+						<a href="/#/environments/editCookbookVersion/{{environment.name}}/{{name}}"><button class="btn btn-success" ng-disabled="!authedUser.adminOn && !environment.authorized">&nbsp; Edit &nbsp;</button></a>
+						<button 
+							class="btn btn-success" 
+							ng-click="deleteCookbookVersionConstraint(name)"
+							ng-disabled="!authedUser.adminOn && !environment.authorized">&nbsp; Delete &nbsp;
+						</button>
+					</td>
+				</tr>
+			</tbody>
+			</table>
+		</div><br /><br />
+		
+		
+		
+		<div ng-show="environmentAttributesShow">
+			
+			<div style="width:1024px;">
+				<div style="float: left; width: 400px;">
+				    <h4>Default Attributes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<button 
+							class="btn btn-success" 
+							ng-click="showAddDefaultAttributeBox('root')"
+							ng-disabled="!authedUser.adminOn && !environment.authorized">
+							&nbsp; Add &nbsp;
+						</button>	
+				    </h4> 
+				</div>
+				<div style="float: right; width:340px; margin-top: 10px;">
+				 * Attributes are saved immediately
+				</div>
+			</div>
+			
+			
+			<div style="clear: both;" >
+				<hr />
+				<treecontrol class="tree-light"
+				   tree-model="defaultAttributesTree"
+				   options="treeOptions"
+				   selected-node="node2" >
+					<span>
+		            	{{node.key}} <span ng-if="node.value != null">= {{node.value}}&nbsp;
+		            		<span style="font-size: 10px;">
+			            		<div style="float: right; margin-right: 100px;">
+			            			<button 
+										class="btn btn-success" 
+										ng-click="showEditDefaultAttributeBox(node)"
+										ng-disabled="!authedUser.adminOn && !environment.authorized">
+										&nbsp; Edit &nbsp;
+									</button>
+			            			
+			            			<button 
+										class="btn btn-success" 
+										ng-click="deleteDefaultAttributesNode(node)"
+										ng-disabled="!authedUser.adminOn && !environment.authorized">
+										&nbsp; Delete &nbsp;
+									</button>
+								</div>
+		            		</span></span> 
+		            		<span style="font-size: 10px;" ng-if="node.value == null">&nbsp;
+								<div style="float: right; margin-right: 100px;">
+			            			
+									<button 
+										class="btn btn-success" 
+										ng-click="showAddDefaultAttributeBox(node)"
+										ng-disabled="!authedUser.adminOn && !environment.authorized">
+										&nbsp; Add &nbsp;
+									</button>
+			            			<button 
+										class="btn btn-success" 
+										ng-click="deleteDefaultAttributesNode(node)"
+										ng-disabled="!authedUser.adminOn && !environment.authorized">
+										&nbsp; Delete &nbsp;
+									</button>
+							</div>
+		            		</span>
+		            		<hr style="margin-top: 6px; margin-bottom: 6px;"/>
+		            </span>
+				   
+				</treecontrol>
+	
+			</div>
+			<br /><hr />
+		</div>	
+		
+		
+		
+		<div ng-show="environmentAttributesShow">
+			
+			
+			
+			
+			<div style="width:1024px;">
+				<div style="float: left; width: 400px;">
+				    <h4>Override Attributes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<button 
+							class="btn btn-success" 
+							ng-click="showAddOverrideAttributeBox('root')"
+							ng-disabled="!authedUser.adminOn && !environment.authorized">
+							&nbsp; Add &nbsp;
+						</button>	
+				    </h4> 
+				</div>
+				<div style="float: right; width:340px; margin-top: 10px;">
+				 * Attributes are saved immediately
+				</div>
+			</div>
+	
+			<br /><br />
+
+			<div style="clear: both;" >
+					 <hr />
+					<treecontrol class="tree-light"
+					   tree-model="overrideAttributesTree"
+					   options="treeOptions"
+					   
+					   selected-node="node2" >
+					   
+						<span>
+			            	{{node.key}} <span ng-if="node.value != null">= {{node.value}}&nbsp;
+			            		<span style="font-size: 10px;">
+				            		<div style="float: right; margin-right: 100px;">
+				            			<button 
+											class="btn btn-success" 
+											ng-click="showEditOverrideAttributeBox(node)"
+											ng-disabled="!authedUser.adminOn && !environment.authorized">
+											&nbsp; Edit &nbsp;
+										</button>
+				            			
+				            			<button 
+											class="btn btn-success" 
+											ng-click="deleteOverrideAttributesNode(node)"
+											ng-disabled="!authedUser.adminOn && !environment.authorized">
+											&nbsp; Delete &nbsp;
+										</button>
+									</div>
+			            		</span></span> 
+			            		<span style="font-size: 10px;" ng-if="node.value == null">&nbsp;
+									<div style="float: right; margin-right: 100px;">
+				            			
+										<button 
+											class="btn btn-success" 
+											ng-click="showAddOverrideAttributeBox(node)"
+											ng-disabled="!authedUser.adminOn && !environment.authorized">
+											&nbsp; Add &nbsp;
+										</button>
+										
+				            			<button 
+											class="btn btn-success" 
+											ng-click="deleteOverrideAttributesNode(node)"
+											ng-disabled="!authedUser.adminOn && !environment.authorized">
+											&nbsp; Delete &nbsp;
+										</button>
+								</div>
+			            		</span>
+			            		<hr style="margin-top: 6px; margin-bottom: 6px;"/>
+			            </span>
+					   
+					</treecontrol>
+
+			</div>
+			<br /><hr />
+		</div>	
+		<br />
+		<div id="environmentNodesContainer" ng-show="{{environmentNodesShow}}">
+			<h4>Nodes</h4>
+			<table class="table" id="editEnvAttributesTable">
+				<tr>
+					<th style="text-align: center">Name</th>
+					<th style="text-align: center">Last Report</th>
+					<th style="text-align: center">Chef Version</th>
+					<th style="text-align: center">Actions</th>
+				</tr>
+				
+			<tbody ng-repeat="(nodeName, nodeData) in environmentNodes">
+				<tr>
+					<td style="width: 130px; text-align: left; ">{{nodeName}}</td>
+					<td style="width: 100px; text-align: center; " ng-class="node.ohaiTimeStatus">{{nodeData.ohaiTimeDelta}}</td>
+					<td style="width: 100px; text-align: center; " ng-class="node.chefVersionStatus">{{nodeData.chef_packages.chef.version}}</td>
+					<td style="width: 180px; text-align: center; ">
+						<a href="/#/nodes/{{nodeName}}">
+							<button 
+								class="btn btn-success" 
+								ng-disabled="!authedUser.adminOn && !nodeData.authorized">&nbsp; Manage &nbsp;
+							</button>
+						</a>
+						<button 
+							class="btn btn-success" 
+							ng-click="deleteNode(nodeName)"
+							ng-disabled="!authedUser.adminOn && !nodeData.authorized">
+							&nbsp; Delete &nbsp;
+						</button>
+						
+					</td>
+				</tr>
+			</tbody>
+			</table><center><img  id="loading-spinner"  src="../images/spinner-clock-blue.gif"/></center>
+		</div>
+		<hr>
+	</div>
+	
+
+
+
+<br /><br />
+
+<hr>
+<footer></footer>
+</div>
+
+
+<div id='addDefaultAttributeOverlay' class='attributeOverlay' ng-show='showAddDefaultAttribute'>
+	<div id='addDefaultAttributePopup' class='attributePopup alert alert-dismissable  message-panel'>
+   		<div style="width:550px; float: left; ">
+        	<div style="align: left;">
+                <label for="attributeKey" style="width: 100px; float: left">Type</label>
+                <input type="radio" name="defaultAttributeType" ng-model="newNode.type" value="object">&nbsp;Object Container&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="defaultAttributeType" ng-model="newNode.type" value="string" checked>&nbsp;Key/Value Pair<br><br />        
+            </div>    		
+        </div>
+		<div style="width:550px; float: left; ">
+        	<div style="align: left;">
+                <label for="newAttributeKey" style="width: 100px; float: left">Key</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.key" >    
+            </div>	
+        </div>	
+		<div style="width:550px; float: left; margin-top:15px;">
+        	<div style="align: left;">
+                <label for="newAttributeValue" style="width: 100px; float: left">Value</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.value" >   
+            </div>	
+        </div>
+        <div style="width:550px; float: left; margin-top:15px;">
+        	<button 
+				class="btn btn-success" 
+				ng-click="saveNewDefaultAttribute()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Save &nbsp;
+			</button>
+			<button 
+				class="btn btn-success" 
+				ng-click="hideAddDefaultAttributeBox()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Cancel &nbsp;
+			</button>
+        </div>
+	</div>	
+</div>
+
+<div id='editDefaultAttributeOverlay' class='attributeOverlay' ng-show='showEditDefaultAttribute'>
+	<div id='editDefaultAttributePopup' class='attributePopup alert alert-dismissable  message-panel'>
+   		
+		<div style="width:550px; float: left; ">
+        	<div style="align: left;">
+                <label for="attributeKey" style="width: 100px; float: left">Key</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.key" >    
+            </div>	
+        </div>	
+		<div style="width:550px; float: left; margin-top:15px;">
+        	<div style="align: left;">
+                <label for="attributeValue" style="width: 100px; float: left">Value</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.value" >   
+            </div>	
+        </div>
+        <div style="width:550px; float: left; margin-top:15px;">
+        	<button 
+				class="btn btn-success" 
+				ng-click="saveDefaultAttributesCurrentNode()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Save &nbsp;
+			</button>
+			<button 
+				class="btn btn-success" 
+				ng-click="hideEditDefaultAttributeBox()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Cancel &nbsp;
+			</button>
+        </div>
+	</div>	
+</div>
+
+<div id='addOverrideAttributeOverlay' class='attributeOverlay' ng-show='showAddOverrideAttribute'>
+	<div id='addOverrideAttributePopup' class='attributePopup alert alert-dismissable  message-panel'>
+   		<div style="width:550px; float: left; ">
+        	<div style="align: left;">
+                <label for="attributeKey" style="width: 100px; float: left">Type</label>
+                <input type="radio" name="overrideAttributeType" ng-model="newNode.type" value="object">&nbsp;Object Container&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="overrideAttributeType" ng-model="newNode.type" value="string" checked>&nbsp;Key/Value Pair<br><br />        
+            </div>    		
+        </div>
+		<div style="width:550px; float: left; ">
+        	<div style="align: left;">
+                <label for="newAttributeKey" style="width: 100px; float: left">Key</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.key" >    
+            </div>	
+        </div>	
+		<div style="width:550px; float: left; margin-top:15px;">
+        	<div style="align: left;">
+                <label for="newAttributeValue" style="width: 100px; float: left">Value</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.value" >   
+            </div>	
+        </div>
+        <div style="width:550px; float: left; margin-top:15px;">
+        	<button 
+				class="btn btn-success" 
+				ng-click="saveNewOverrideAttribute()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Save &nbsp;
+			</button>
+			<button 
+				class="btn btn-success" 
+				ng-click="hideAddOverrideAttributeBox()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Cancel &nbsp;
+			</button>
+        </div>
+	</div>	
+</div>
+
+<div id='editOverrideAttributeOverlay' class='attributeOverlay' ng-show='showEditOverrideAttribute'>
+	<div id='editOverrideAttributePopup' class='attributePopup alert alert-dismissable  message-panel'>
+   		
+		<div style="width:550px; float: left; ">
+        	<div style="align: left;">
+                <label for="attributeKey" style="width: 100px; float: left">Key</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.key" >    
+            </div>	
+        </div>	
+		<div style="width:550px; float: left; margin-top:15px;">
+        	<div style="align: left;">
+                <label for="attributeValue" style="width: 100px; float: left">Value</label>
+            	<input style="width: 350px; float: right" class="form-control" ng-model="newNode.value" >   
+            </div>	
+        </div>
+        <div style="width:550px; float: left; margin-top:15px;">
+        	<button 
+				class="btn btn-success" 
+				ng-click="saveOverrideAttributesCurrentNode()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Save &nbsp;
+			</button>
+			<button 
+				class="btn btn-success" 
+				ng-click="hideEditOverrideAttributeBox()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Cancel &nbsp;
+			</button>
+        </div>
+	</div>	
+</div>
+
+
+<div id='copyEnvironmentOverlay' class='attributeOverlay' ng-show='showCopyEnvironmentOverlay'>
+	<div id='copyEnvironmentPopup' class='attributePopup alert alert-dismissable  message-panel'>
+		<h4>Enter a name and server for the environment copy</h4><br />
+		<div class="form-group" style="margin-bottom: 50px;">
+            <label for="copyName" class="{{labelClass}} control-label">Name</label>
+
+            <div class="{{inputClass}}">
+                <input class="form-control" ng-model="copyName" >
+            </div>
+   		</div>
+   		
+   		<div class="form-group">
+                <label for="chefServer" class="{{labelClass}} control-label">Chef Server</label>
+
+                <div class="{{inputClass}}">
+                    <select class="form-control" id="chefServer" ng-model="copyEnvChefServer"
+
+                            ng-options="s.displayValue for s in chefServers" ></select>
+                </div>
+        </div>
+		<div style="margin-top: 110px;">
+			<button 
+				class="btn btn-success" 
+				ng-click="saveEnvironmentCopy()"
+				ng-disabled="!authedUser.adminOn && !environment.authorized">
+				&nbsp; Save &nbsp;
+			</button>
+			<button 
+				class="btn btn-success" 
+				ng-click="hideCopyEnvironmentOverlayBox()">
+				&nbsp; Cancel &nbsp;
+			</button>
+		</div>
+		
+	</div>
+</div>

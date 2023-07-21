@@ -1,0 +1,39 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <h2 style="margin: 20px 0;">Reports: Users</h2>
+    <table-pager input="users" output="pagedData" predicate="predicate" reverse="reverse"></table-pager>
+
+    <table class="table" at-table at-list="users">
+        <thead></thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th><a href="" ng-click="predicate = 'lastName'; reverse = !reverse;">Last Name</a></th>
+            <th><a href="" ng-click="predicate = 'firstName'; reverse = !reverse;">First Name</a></th>
+            <th><a href="" ng-click="predicate = 'username'; reverse = !reverse;">User Name</a></th>
+            <th><a href="" ng-click="predicate = 'userType'; reverse = !reverse;">User Type</a></th>
+            <th><a href="" ng-click="predicate = 'numServerBuilds'; reverse = !reverse;">Num Builds</a></th>
+            <th><a href="" ng-click="predicate = 'title'; reverse = !reverse;">Title</a></th>
+            <th><a href="" ng-click="predicate = 'dept'; reverse = !reverse;">Department</a></th>
+            <th><a href="" ng-click="predicate = 'numLogins'; reverse = !reverse;">Num Logins</a></th>
+            <th><a href="" ng-click="predicate = 'lastLogin'; reverse = !reverse;">Last Login</a></th>
+        </tr>
+        <tr ng-repeat="user in pagedData track by $index">
+            <td>{{$index + 1}}</td>
+            <td><a href="/#/users/{{user.id}}">{{user.lastName}}</a></td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.userType}}</td>
+            <td>{{user.numServerBuilds}}</td>
+            <td>{{user.title}}</td>
+            <td>{{user.dept}}</td>
+            <td>{{user.numLogins}}</td>
+            <td>{{user.lastLogin}}</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

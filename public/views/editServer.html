@@ -1,0 +1,865 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<script type="text/ng-template" id="typeaheadTemplate.html">
+  <a>
+      <span ng-bind-html="match.label"></span>
+  </a>
+</script>
+
+<!-- Content -->
+<div class="editServerHeading" style="top:50px; width: 100%; position: fixed; z-index: 1000; background-color: #E6EFFC;">
+    <div style="float: left; margin-left: 140px;">
+        <div class="serverName" style="margin-top: 10px;">{{server.name}}</div>
+        <div class="editServerHeading {{ server.leaseAlertClass }}"
+             ng-show="server.isLeased && server.daysToLeaseEnd > 0">
+            This VM's lease will expire in {{ server.daysToLeaseEnd }} days and will then be reaped
+        </div>
+        <div class="editServerHeading {{ server.leaseAlertClass }}" ng-show="server.isLeased && server.daysToLeaseEnd <= 0">
+            This VM's lease has expired and will be reaped within 24 hours
+        </div>
+    </div>
+
+    <div style="float:right; margin-right: 160px; margin-top: 20px">
+        <form class="" role="form" style="margin:0; padding:0">
+            <div>
+                <button class="btn btn-success"
+                        ng-click="buttonSaveServer()"
+                        tooltip-placement="left"
+                        tooltip="Save this configuration">Save
+                </button>
+                <button class="btn btn-success"
+                        tooltip-placement="left"
+                        tooltip="Copy this configuration"
+                        ng-disabled="server.serverPoolId !== 0 && authedUser.userType !== 'Admin'"
+                        ng-click="buttonCopyServer()">Copy
+                </button>
+                <button class="btn btn-success"
+                        ng-disabled="!server.okToBuild"
+                        tooltip-placement="left"
+                        tooltip="Save changes and build this puppy"
+                        ng-click="buttonBuildServer()">Build
+                </button>
+                <!--
+                <button class="btn btn-success"
+                        ng-disabled="!server.okToBuild"
+                        tooltip-placement="left"
+                        tooltip="Use existing server, DNS & LDAP configuration and rebuild"
+                        ng-click="buttonRebuildServer()">Rebuild
+                </button>
+                -->
+                <button class="btn btn-warning"
+                        tooltip-placement="left"
+                        tooltip="Cancel edits and return to servers page"
+                        ng-click="buttonCancelServerEdit()">Cancel
+                </button>
+                <button class="btn btn-danger"
+                        tooltip-placement="left"
+                        tooltip="Delete this server and all of its artifacts"
+                        ng-click="buttonDeleteServer()">Delete
+                </button>
+                <button class="btn btn-primary"
+                        ng-show="server.serverType === 'vmware' && server.serverPoolId !== 0"
+                        ng-disabled="server.numExtensionsRemaining === 0"
+                        tooltip-placement="left"
+                        tooltip="Extend your lease by {{ server.extensionInDays }} days"
+                        ng-click="buttonExtendLease()">Extend Lease
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="status-row" style="float: right; margin-right: 160px; clear: right; width: 400px; height:40px;">
+        <span class="serverStatus">{{statusText}}
+            <img id="mask-spinner" class="mask-spinner" ng-show="buildRunning" src="../images/spinner-clock-blue.gif"/>
+        </span>
+    </div>
+</div>
+
+
+<div class="container" style="margin-top: 120px;">
+
+<div class="col-lg-12">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="serverType" class="col-lg-3 control-label">Server Type</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="serverType"
+                        ng-model="server.serverType" required
+                        ng-disabled="authedUserService.authedUser.userType !== 'Admin'"
+                        ng-change="onServerTypeChange()">
+                    <option value="vmware" selected>VMWare VM</option>
+					<option value="vmwareCobbler" selected>VMWare From Cobbler</option>
+                    <option value="standalone">Standalone</option>
+                    <option value="blade">Blade</option>
+                    <option value="remote">Remote</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="server.serverType === 'vmware' && server.serverPoolId !== 0">
+            <label for="leaseType" class="col-lg-3 control-label">Lease Type</label>
+
+            <div class="col-lg-9">
+                <div class="form-control" id="leaseType" ng-disabled="1">
+                    {{ server.daysToLeaseEnd}} days remaining of a {{ server.leaseDuration }}-day lease started on {{ server.leaseStartDate }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="server.serverType === 'vmware' && server.serverPoolId !== 0">
+            <label for="leaseOptions" class="col-lg-3 control-label">Lease Options</label>
+
+            <div class="col-lg-9">
+                <div class="form-control" id="leaseOptions" ng-disabled="1">
+                    There are {{ server.numExtensionsRemaining }}, {{ server.extensionInDays }}-day extensions remaining
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="col-lg-3 control-label">Description</label>
+
+            <div class="col-lg-9">
+                <input id="description" class="form-control" ng-model="server.description">
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="col-md-6" ng-show="!server.serverPoolId">-->
+    <div class="col-md-6">
+
+        <div class="form-group">
+            <label for="businessService" class="col-lg-3 control-label">Bus Service</label>
+
+            <div class="col-lg-9">
+                <input type="text" id="businessService"
+                       ng-model="server.businessService"
+                       placeholder="Enter substring"
+                       typeahead="bs as bs.name for bs in neumaticService.getBusServicesForTypeAhead($viewValue)"
+                       typeahead-editable="false"
+                       typeahead-min-length="3"
+                       typeahead-wait-ms="750"
+                       typeahead-loading="loadingBusServices"
+                       typeahead-on-select="businessServiceSelected()"
+                       typeahead-template-url="typeaheadTemplate.html"
+                       class="form-control">
+                <i ng-show="loadingBusServices" class="glyphicon glyphicon-refresh"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="subsystem" class="col-lg-3 control-label">Subsystem</label>
+
+            <div class="col-lg-9">
+                <select id="subsystem"
+                        class="form-control"
+                        ng-model="server.subsystem"
+                        ng-disabled="!server.businessService"
+                        ng-options="subsystem as subsystem.name for subsystem in subsystems">
+                        </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cmdbEnvironment" class="col-lg-3 control-label">Environment</label>
+
+            <div class="col-lg-9">
+                <select id="cmdbEnvironment"
+                        class="form-control"
+                        ng-model="server.cmdbEnvironment"
+                        ng-options="cmdbEnvironment for cmdbEnvironment in cmdbEnvironments">
+                        </select>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-lg-12">
+    <hr>
+    <h3 class="form">LDAP</h3>
+
+    <div class="col-md-6">
+        <div class="form-group">
+
+            <label class="col-lg-3 control-label">User Group</label>
+
+            <!-- from ng-tags-input library -->
+            <tags-input ng-model="server.ldapUserGroups"
+                        class="col-lg-9"
+                        key-property="name"
+                        display-property="name"
+                        placeholder="Add a group"
+                        add-from-autocomplete-only="true">
+                <auto-complete
+                       source="loadLdapUserGroups($query)"
+                       display-property="name">
+                </auto-complete>
+            </tags-input>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+
+            <label class="col-lg-3 control-label">Host Group</label>
+
+            <!-- from ng-tags-input library -->
+            <tags-input ng-model="server.ldapHostGroups"
+                        class="col-lg-9"
+                        key-property="name"
+                        display-property="name"
+                        placeholder="Add a group"
+                        add-from-autocomplete-only="true">
+                <auto-complete
+                       source="loadLdapHostGroups($query)"
+                       display-property="name">
+                </auto-complete>
+            </tags-input>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12" ng-show="server.serverType=='vmware' || server.serverType=='vmwareCobbler'">
+    <hr>
+    <h3 class="form">VM</h3>
+    <div class="col-md-6">
+
+        <!-- Host Name -->
+        <div class="form-group">
+            <label for="name" class="col-lg-3 control-label">Name</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       ng-model="server.name"
+                       required
+                       ng-disabled="server.serverType === 'vmware' && server.serverPoolId !== 0"
+                       ng-blur="onHostNameChange()">
+            </div>
+        </div>
+
+        <!-- Data Center -->
+        <div class="form-group">
+            <label for="dataCenter" class="col-lg-3 control-label">Data Center</label>
+
+            <div class="col-lg-9">
+                <select id="dataCenter"
+                        class="form-control"
+                        ng-model="server.dataCenter"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        ng-options="dataCenter as dataCenter.displayValue for dataCenter in dataCenters"
+                        ng-change="dataCenterSelected()"></select>
+            </div>
+        </div>
+         <!-- Template -->
+        <div class="form-group" ng-hide="server.serverType != 'vmware'">
+            <label for="template" class="col-lg-3 control-label">Template</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                		id="template"
+                        ng-model="server.template"
+                        ng-disabled="server.serverType != 'vmware'"
+                        ng-options="template as template.name for template in templates"
+                        ></select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <!-- Cluster Compute Resource -->
+        <div class="form-group">
+            <label for="computeCluster" class="col-lg-3 control-label">Cluster</label>
+
+            <div class="col-lg-9">
+                <select id="computeCluster"
+                        class="form-control"
+                        ng-model="server.ccr"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        ng-options="computeCluster as computeCluster.name for computeCluster in computeClusters"
+                        ng-change="computeClusterSelected()"></select>
+            </div>
+        </div>
+
+        <!-- VLAN -->
+        <div class="form-group">
+            <label for="vlan" class="col-lg-3 control-label">VLAN</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        ng-model="server.vlan"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        ng-options="vlan as vlan.displayValue for vlan in vlans"
+                        ng-change="vlanSelected()"></select>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+<div class="col-lg-12" ng-show="(server.serverType === 'standalone' || server.serverType === 'remote') && authedUser.userType === 'Admin'">
+    <hr>
+    <h3 class="form">Standalone</h3>
+    <div class="col-md-6">
+
+        <!-- Host Name -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Name</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       ng-model="server.name"
+                       ng-blur="onHostNameChange()">
+            </div>
+        </div>
+
+        <!-- Host Name -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">iLo Name or IP</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       ng-model="server.standalone.iLo">
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Location</label>
+
+            <div class="col-lg-9" ng-show="server.serverType === 'remote'">
+                <input type="text"
+                       ng-model="server.location"
+                       placeholder="Enter substring"
+                       typeahead="loc as loc.name for loc in neumaticService.getLocationsForTypeAhead($viewValue)"
+                       typeahead-editable="false"
+                       typeahead-min-length="3"
+                       typeahead-wait-ms="750"
+                       typeahead-loading="loadingLocations"
+                       typeahead-on-select="locationSelected()"
+                       typeahead-template-url="typeaheadTemplate.html"
+                       class="form-control">
+                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+            </div>
+            <div class="col-lg-9" ng-show="server.serverType === 'standalone'">
+                <select class="form-control"
+                        ng-model="server.location"
+                        ng-options="loc as loc.name for loc in locations"
+                        ng-change="locationSelected()"></select>
+            </div>
+        </div>
+
+        <!-- Distribution Switch -->
+        <div class="form-group" ng-hide="server.serverType === 'remote'">
+            <label class="col-lg-3 control-label">Dist Switch</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        ng-model="server.distSwitch"
+                        ng-options="distSwitch for distSwitch in distSwitches"
+                        ng-change="distSwitchSelected()"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+        <!-- VLAN -->
+        <div class="form-group" ng-hide="server.serverType === 'remote'">
+            <label class="col-lg-3 control-label">VLAN</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        ng-model="server.vlan"
+                        ng-options="vlan as vlan.displayValue for vlan in vlans"
+                        ng-change="vlanSelected()">
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-lg-12" ng-show="server.serverType === 'blade' && authedUser.userType === 'Admin'">
+    <hr>
+    <h3 class="form">Blade</h3>
+    <div class="col-md-6">
+
+        <!-- Host Name -->
+        <div class="form-group">
+            <label for="name" class="col-lg-3 control-label">Name</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       id="name"
+                       ng-model="server.name"
+                       ng-blur="onHostNameChange()">
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Location</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        ng-model="server.location"
+                        ng-options="loc as loc.name for loc in locations"
+                        ng-change="locationSelected()"></select>
+            </div>
+        </div>
+
+        <!-- Distribution Switch -->
+        <div class="form-group">
+            <label for="distSwitch" class="col-lg-3 control-label">Dist Switch</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="distSwitch"
+                        ng-model="server.distSwitch"
+                        ng-options="distSwitch for distSwitch in distSwitches"
+                        ng-change="distSwitchSelected()"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+        <!-- Chassis -->
+        <div class="form-group">
+            <label for="chassis" class="col-lg-3 control-label">Chassis Name</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="chassis"
+                        ng-model="server.chassis"
+                        ng-options="chassis as chassis.name for chassis in chassises"
+                        ng-change="chassisSelected()">
+                </select>
+            </div>
+        </div>
+
+        <!-- Blade -->
+        <div class="form-group">
+            <label for="blade" class="col-lg-3 control-label">Blade Name</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="blade"
+                        ng-model="server.blade"
+                        ng-options="blade as blade.displayValue for blade in blades"
+                        ng-change="bladeSelected()">
+                </select>
+            </div>
+        </div>
+
+        <!-- VLAN -->
+        <div class="form-group">
+            <label for="vlan" class="col-lg-3 control-label">VLAN</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="vlan"
+                        ng-model="server.vlan"
+                        ng-options="vlan as vlan.displayValue for vlan in vlans"
+                        ng-change="vlanSelected()">
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-lg-12" ng-show="server.serverType === 'vmware'">
+    <hr>
+    <h3 class="form">Sizing</h3>
+
+    <div class="col-md-6">
+
+        <!-- VM Sizes -->
+        <div class="form-group" ng-hide="server.serverType === 'vmware'">
+            <label class="col-lg-3 control-label">Size</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        ng-model="server.vmSize"
+                        ng-disabled="useTemplate == true"
+                        ng-options="vmSize as vmSize.displayValue for vmSize in vmSizes"></select>
+            </div>
+        </div>
+
+        <!-- Num CPUs -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Num CPUs</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       ng-model="server.vmSize.numCPUs"
+                       ng-disabled="authedUser.userType !== 'Admin'"
+                       required>
+            </div>
+        </div>
+
+        <!-- Memory -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Memory (GB)</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       ng-model="server.vmSize.memoryGB"
+                       ng-disabled="authedUser.userType !== 'Admin'">
+            </div>
+        </div>
+    </div>
+
+    <!-- LUNs -->
+    <div class="col-md-6">
+        <div ng-repeat="lun in server.vmSize.luns">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">LUN Size (GB)</label>
+
+                <div class="col-lg-6">
+                    <input class="form-control"
+                           ng-model="lun.lunSizeGb"
+                           ng-disabled="(server.serverType === 'vmware' && $first)">
+                </div>
+                <div class="col-lg-3">
+                    <button ng-click="buttonDeleteLun($index)"
+                            tooltip-placement="left"
+                            tooltip="Delete this disk"
+                            ng-disabled="server.serverType === 'vmware' && $first"
+                            ng-show="authedUser.userType === 'Admin' && authedUser.adminOn" >Del Disk
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">&nbsp;</div>
+    <div class="col-md-6">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">&nbsp;</div>
+        <div class="col-lg-3"
+             ng-show="authedUser.userType === 'Admin' && authedUser.adminOn === true">
+            <button ng-click="buttonAddLun()"
+                    tooltip-placement="left"
+                    tooltip="Add another disk">Add Disk
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-lg-12">
+    <hr>
+    <h3 class="form">Network</h3>
+    <div class="col-md-6">
+
+        <!-- Network -->
+        <div class="form-group">
+            <label for="network" class="col-lg-3 control-label">Network</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       id="network"
+                       ng-model="server.vlan.network"
+                       ng-disabled="authedUser.userType !== 'Admin'">
+            </div>
+        </div>
+
+        <!-- Subnet Mask -->
+        <div class="form-group">
+            <label for="subnetMask" class="col-lg-3 control-label">Subnet Mask</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       id="subnetMask"
+                       ng-model="server.vlan.subnetMask"
+                       ng-disabled="authedUser.userType !== 'Admin'">
+            </div>
+        </div>
+
+        <!-- Gateway -->
+        <div class="form-group">
+            <label for="gateway" class="col-lg-3 control-label">Gateway</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       id="gateway"
+                       ng-model="server.vlan.gateway"
+                       ng-disabled="authedUser.userType !== 'Admin'">
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6">
+
+        <!-- MAC Address -->
+        <div class="form-group">
+            <label class="col-lg-3 control-label">MAC Address</label>
+
+            <div class="col-lg-8" ng-show="server.serverType === 'vmware' || server.serverType === 'vmwareCobbler'">
+                <input class="form-control"
+                       ng-class="with-mac-address-button"
+                       ng-disabled="authedUser.userType !== 'Admin'"
+                       ng-model="server.vlan.macAddress">
+            </div>
+
+            <div class="col-lg-8" ng-show="server.serverType === 'blade'">
+                <input class="form-control"
+                       ng-class="server.name !== '' && server.chassis.name !== '' && server.chassis.id !== '' ? 'with-mac-address-button' : 'without-mac-address-button'"
+                       ng-disabled="authedUser.userType !== 'Admin'"
+                       ng-model="server.vlan.macAddress">
+                <button class="btn btn-success"
+                        ng-show="server.name !== '' && server.chassis.name !== '' && server.chassis.id !== '' ? true : false"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        tooltip-placement="top"
+                        tooltip="Retrieve the MAC address for this blade"
+                        ng-click="getBladeMacAddress()">Retrieve MAC
+                </button>
+            </div>
+
+            <div class="col-lg-8" ng-show="server.serverType === 'standalone' || server.serverType === 'remote'">
+                <!--
+                <select
+                        class="form-control"
+                        ng-class="server.standalone.iLo !== '' ? 'with-mac-address-button' : 'without-mac-address-button'"
+                        ng-model="macAddress"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        ng-focus="getStandaloneMacAddresses()"
+                        ng-options="macAddress as macAddress.display for macAddress in macAddresses"
+                        ng-change="macAddressSelected()">
+                        </select>
+                -->
+                <input class="form-control"
+                       ng-class="server.name !== '' ? 'with-mac-address-button' : 'without-mac-address-button'"
+                       ng-disabled="authedUser.userType !== 'Admin'"
+                       ng-model="server.vlan.macAddress"
+                       required>
+                <button class="btn btn-success"
+                        ng-show="server.standalone.iLo !== '' ? true : false"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        tooltip-placement="top"
+                        tooltip="Retrieve the MAC address for this host"
+                        ng-click="getStandaloneMacAddress()">Retrieve MAC
+                </button>
+            </div>
+        </div>
+
+        <!-- IP Address -->
+        <div class="form-group">
+            <label for="ipAddress" class="col-lg-3 control-label">IP Address</label>
+
+            <div class="col-lg-9">
+                <input class="form-control with-ip-address-button"
+                       ng-disabled="authedUser.userType !== 'Admin' || server.vlan.subnetMask === '' && server.vlan.gateway === ''"
+                       id="ipAddress"
+                       ng-model="server.vlan.ipAddress">
+                <button class="btn btn-success"
+                        ng-disabled="authedUser.userType !== 'Admin' || !server.vlan.network || !server.vlan.subnetMask"
+                        tooltip-placement="top"
+                        tooltip="Get the next available IP address for this network"
+                        ng-click="getNextAvailableIPAddress()">Get IP Address
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12">
+    <hr>
+    <h3 class="form">Build</h3>
+    <div class="col-md-6">
+
+        <!-- Remote Server ISOs -->
+        <div ng-show="server.serverType === 'remote'">
+            <div class="form-group">
+                <label for="iso" class="col-lg-3 control-label">ISO</label>
+
+                <div class="col-lg-9">
+                    <select class="form-control"
+                            id="iso"
+                            ng-model="server.standalone.iso"
+                            ng-options="iso for iso in isos">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div ng-hide="server.serverType === 'remote' || server.serverType === 'vmware'">
+
+            <!-- Cobbler Server -->
+            <div class="form-group">
+                <label for="cobblerServer" class="col-lg-3 control-label">Cobbler Server</label>
+
+                <div class="col-lg-9">
+                    <select class="form-control"
+                            id="cobblerServer"
+                            ng-model="server.cobblerServer"
+                            ng-disabled="authedUser.userType !== 'Admin'"
+                            ng-options="c.name as c.displayValue for c in cobblerServers"
+                            ng-change="cobblerServerSelected()"></select>
+                </div>
+            </div>
+
+            <!-- Cobbler Distribution -->
+            <div class="form-group">
+                <label for="cobblerDistro" class="col-lg-3 control-label">Cobbler Distro</label>
+
+                <div class="col-lg-9">
+                    <select class="form-control"
+                            id="cobblerDistro"
+                            ng-model="server.cobblerDistro"
+                            ng-options="cobblerDist as cobblerDist.name for cobblerDist in cobblerDistros"
+                            ng-change="cobblerDistroSelected()"></select>
+                </div>
+
+            </div>
+
+            <!-- Cobbler Kickstart -->
+            <div class="form-group">
+                <label for="cobblerKickstart" class="col-lg-3 control-label">Cobbler KS</label>
+
+                <div class="col-lg-9">
+                    <select class="form-control"
+                            id="cobblerKickstart"
+                            ng-model="server.cobblerKickstart"
+                            ng-options="ks for ks in cobblerKickstarts"></select>
+                </div>
+            </div>
+
+            <!-- Xen Hypervisor ? -->
+            <div class="form-group">
+                <label for="xenHypervisor" class="col-lg-3 control-label">Xen Hypervisor</label>
+
+                <div class="col-lg-9">
+                    <input type="checkbox"
+                           class="form-control"
+                           style="width: 20px;"
+                           ng-disabled="authedUser.userType !== 'Admin'"
+                           id="xenHypervisor"
+                           ng-change="isXenChanged()"
+                           ng-model="server.isXen">
+                </div>
+            </div>
+
+            <!-- Cobbler Kickstart Metadata -->
+            <div class="form-group">
+                <label for="cobblerMetadata" class="col-lg-3 control-label">Cobbler KS Metadata</label>
+
+                <div class="col-lg-9">
+                    <input class="form-control"
+                           ng-disabled="authedUser.userType !== 'Admin'"
+                           id="cobblerMetadata"
+                           ng-model="server.cobblerMetadata">
+                </div>
+            </div>
+
+            <!-- Warning for Lab Cobbler distros
+            <div class="form-group">
+                <label class="col-lg-3 control-label"> </label>
+
+                <div class="col-lg-9" style="color:red;">
+                    {{cobblerDistroWarning}}
+                </div>
+            </div>
+            -->
+        </div>
+
+    </div>
+    <div class="col-md-6">
+
+        <!-- Chef Server -->
+        <div class="form-group">
+            <label for="chefServer" class="col-lg-3 control-label">Chef Server</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="chefServer"
+                        ng-model="server.chefServer"
+                        ng-disabled="authedUser.userType !== 'Admin'"
+                        ng-options="s.name as s.displayValue for s in chefServers"
+                        ng-change="chefServerSelected()"></select>
+            </div>
+        </div>
+
+        <!-- Chef Role -->
+        <div class="form-group">
+            <label for="chefRole" class="col-lg-3 control-label">Chef Role</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="chefRole"
+                        ng-model="server.chefRole"
+                        ng-options="role for role in chefRoles">
+                        </select>
+            </div>
+        </div>
+
+        <!-- Chef Environment -->
+        <div class="form-group">
+            <label for="chefEnv" class="col-lg-3 control-label">Chef Env</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="chefEnv"
+                        ng-model="server.chefEnv"
+                        ng-options="env for env in chefEnvs">
+                        </select>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div ng-hide="server.serverType === 'remote'">
+            <div class="form-group"><div class="col-lg-12">&nbsp;</div></div>
+            <div class="form-group"><div class="col-lg-12">&nbsp;</div></div>
+            <div class="form-group"><div class="col-lg-12">&nbsp;</div></div>
+        </div>
+    </div>
+</div>
+<!--
+<div class="col-lg-12">
+    <hr>
+    <h3 class="form">User Info</h3>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="owner" class="col-lg-3 control-label">Owner</label>
+            <div id="owner" class="col-lg-9">
+                <span class="form-control" ><a href="/#/users/{{server.owner.id}}">{{server.owner.firstName}} {{server.owner.lastName}}</a></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-lg-3 control-label">EMail</label>
+            <div id="email" class="col-lg-9">
+                <span class="form-control">{{server.owner.email}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="createDate" class="col-lg-3 control-label">Create Date</label>
+            <div id="createDate" class="col-lg-9">
+                <input class="form-control" type="text" readonly value="{{server.dateCreated}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="buildDate" class="col-lg-3 control-label">Build Date</label>
+            <div id="buildDate" class="col-lg-9">
+                <input class="form-control" type="text" readonly value="{{server.dateBuilt}}"/>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+</div> <!-- container -->
+
+<hr>
+<footer></footer>

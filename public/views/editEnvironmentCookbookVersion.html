@@ -1,0 +1,99 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top" style="width:1024px;">
+
+    <!-- Alert -->
+    <div class="alert alert-{{alert.type}} alert-dismissable message-panel" ng-show="alert.show">
+        <button type="button" class="close" aria-hidden="true" ng-click="alert.show = false">&times;</button>
+        <strong>{{alert.title}}</strong><br>
+        <pre>{{alert.message}}</pre>
+    </div>
+
+    
+<div style="width:1024px;">	
+			<div  >
+				<h3>Environment: {{environmentName}}</h3>
+				
+				<br>
+			</div>
+			
+			<div id="nodeButtons" style="float: right; margin-right: 100px; margin-top: -50px;">
+				<button 
+					class="btn btn-success ng-scope" 
+					tooltip-placement="bottom"
+                    tooltip="Save this Version Constraint" 
+                    ng-click="saveCookbookVersion()">Save
+                </button>
+				
+		        <button class="btn btn-success"
+		            tooltip-placement="bottom"
+		            tooltip="Return to previous page"
+		            ng-click="back()">Back
+		       </button>
+			</div> 
+	</div><br />
+    <div>
+        <hr>
+        <div class="row">
+            <div class="{{rowClass}}">
+
+                <form name="environmentForm" novalidate role="form">
+
+                    <div class="form-group">
+                        <label for="cookbook" class="{{labelClass}} control-label">Cookbook</label>
+
+                        <div class="{{inputClass}}">
+                            <select class="form-control" id="cookbook" ng-model="cookbookSelected"
+                                    ng-disabled="disableEditCookbook" required
+                                    ng-options="cookbook.name for cookbook in cookbooks">
+                                <option value="">-- Select Cookbook --</option>
+                            </select>
+
+                            <div ng-show="cookbooksLoading">loading...</div>
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+
+                    <div class="form-group" >
+                        <label for="operator" class="{{labelClass}} control-label">Operator</label>
+
+                        <div class="{{inputClass}}">
+                            <select class="form-control" id="operator" ng-model="operatorSelected" required>
+                                <option value="">-- Select Operator --</option>
+                                <option value="=">=</option>
+                                <option value=">">></option>
+                                <option value="<"><</option>
+                                <option value=">=">>=</option>
+                                <option value="<="><=</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/><br/>
+
+                    <div class="form-group">
+                        <label for="version" class="{{labelClass}} control-label">Version</label>
+
+                        <div class="{{inputClass}}">
+                            <select class="form-control" id="version" ng-model="versionSelected" required
+                                    ng-options="version for version in cookbookSelected.versions">
+                                <option value="">-- Select Version --</option>
+                            </select>
+
+                            <div ng-show="versionsLoading">loading...</div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    
+                </form>
+            </div>
+
+        </div>
+        <hr>
+
+    </div>
+</div>
+<hr>
+<footer></footer>

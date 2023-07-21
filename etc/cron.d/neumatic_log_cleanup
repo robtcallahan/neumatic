@@ -1,0 +1,4 @@
+# remove old watcher log files
+* 1 * * * root find /opt/neumatic/watcher_log -mtime +2 -exec rm -f {} \; > /dev/null 2>&1
+* 1 * * * root find /tmp -name 'console*' -mtime +1 -exec rm -f {} \; > /dev/null 2>&1
+* 1 * * * root find /tmp -name 'curl-cookie.*' -mtime +1 -exec rm -f {} \; > /dev/null 2>&1

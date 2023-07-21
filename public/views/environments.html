@@ -1,0 +1,146 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+
+<!-- Content -->
+<div class="container environments-table pad-top" style="width:1024px;">
+	<div style="width: 950px; margin-bottom: 100px;">
+	    <div style="width:400px; float: left; ">
+	    	<div style="align: left;">
+	          <label for="chefServer" style="word-wrap: break-word; float: left;">Chef Server</label><select style="float: right; width: 300px;" class="form-control" id="chefServer" ng-model="chefServerSelected" ng-options="s.displayValue for s in chefServers" ng-change="chefServerChange()"></select>
+	        </div>
+	   		<div style="align: left; margin-top: 50px; ">
+	            <label for="chefServer" style="margin-right: 53px;">Search</label><input ng-model="searchText">
+	        </div>
+	    </div>
+	    <div style="float: right; ">
+	        <button class="btn btn-success"
+	        	ng-click="go('/environments/new')">
+	            &nbsp; New &nbsp;
+	        </button>
+	    </div>
+	</div>
+
+<!--	
+    <div class="row" style="float:left; width: 500px; margin-bottom: 20px;">
+        <div class="{{rowClass}}" style="width: 100%">
+            <div class="form-group">
+                <label for="chefServer" class="{{labelClass}} control-label">Chef Server</label>
+
+                <div class="{{inputClass}}">
+                    <select class="form-control" id="chefServer" ng-model="chefServerSelected" ng-options="s.displayValue for s in chefServers" ng-change="chefServerChange()"></select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="search" class="{{labelClass}} control-label">Search</label>
+
+                <div class="{{inputClass}}">
+                    <input ng-model="searchText">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="environmentsButtons" style="float: right; margin-right: 80px; margin-top: 40px;">
+        
+        <button class="btn btn-success"
+        	ng-click="go('/environments/new')"
+                >
+            &nbsp; New &nbsp;
+        </button>
+    
+    </div>
+    <br/><br/>
+-->
+    <div style="float: left; width: 1024px;">
+
+        <h3>Environments</h3>
+    </div>
+    <br/><br/><br/>
+    <table class="table">
+        <tr>
+            <th><a href="" ng-click="predicate = 'name'; reverse = !reverse;">Name</a></th>
+            <th>Description</th>
+            <th><a href="" ng-click="predicate = 'business_service'; reverse = !reverse;">Business Service</a></th>
+            <th><a href="" ng-click="predicate = 'subsystem'; reverse = !reverse;">Subsystem</a></th>
+            <th><a href="" ng-click="predicate = 'node_count'; reverse = !reverse;">Nodes</th>
+            <th>Actions</th>
+        </tr>
+        <tbody ng-repeat="environment in environments|filter:searchText|orderBy:predicate:reverse">
+        <tr>
+            <td><a ng-click="showEnvEdit = ! showEnvEdit"><b style="cursor: pointer;">{{environment.name}}</b></a></td>
+            <td>{{environment.description}}</td>
+            <td>{{environment.default_attributes.neustar.business_service}}</td>
+            <td>{{environment.default_attributes.neustar.subsystem}}</td>
+            <td>{{environment.node_count}}</td>
+            <td nowrap class="environments-actions-cell">
+                <!-- <button class="btn btn-success" ng-click="showEnvEdit = ! showEnvEdit">
+                    &nbsp; Info &nbsp;
+                </button> -->
+                <!-- only enable if the user has permissions to edit this environment -->
+               
+                
+                <button class="btn btn-success"
+                        ng-disabled="!authedUser.adminOn && environment.authorized != true"
+                        tooltip-placement="bottom"
+                        tooltip="Manage this environment"
+                        ng-click="go('/environments/'+environment.name)"
+                        >
+                    &nbsp; Manage &nbsp;
+                </button>
+               
+                
+                <button class="btn btn-success"
+                        ng-disabled="!authedUser.adminOn && environment.authorized != true"
+                        ng-show="nav.environments"
+                        tooltip-placement="bottom"
+                        tooltip="Delete this environment"
+                        ng-click="deleteEnvironment(environment.name)">Delete
+                </button>
+            </td>
+        </tr>
+        <tr ng-show="showEnvEdit">
+            <td colspan=6>
+                <div class="environmentAttributesBox">
+                    <b>Attributes</b>
+
+                    <div class="environmentAttributesList"
+                         ng-repeat="(attname, att) in environment.default_attributes.neustar">
+                        {{attname}} = {{att}}
+                    </div>
+                </div>
+
+                <div class="environmentCookbookVersionsBox">
+                    <b>Cookbook Restrictions</b>
+
+                    <div class="environmentCookbookVersion" ng-repeat="(vername, ver) in environment.cookbook_versions">
+                        {{vername}} {{ver}}
+                    </div>
+                </div>
+                <div class="environmentNodeListBox">
+                    <b>Node List</b>
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <th>Last Report</th>
+                            <th>Chef Version</th>
+                        </tr>
+                        <tbody ng-repeat="node in environment.nodes">
+                        <tr>
+                            <td><a href="/#/nodes/{{node}}">{{node}}</a></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <center><img id="loading-spinner" src="../images/spinner-clock-blue.gif"/></center>
+</div>
+
+<hr>
+<footer></footer>
+

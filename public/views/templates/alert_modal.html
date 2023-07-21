@@ -1,0 +1,15 @@
+<!-- Alert Modal Message -->
+<div class="modal-header">
+    <h3 style="margin: 0 0 10px 0;">{{alert.title}}</h3>
+</div>
+<div class="modal-body alert-{{alert.type}}">
+    <p ng-bind-html="alert.message"></p>
+    <div ng-show="alert.trace">
+        <span>Traceback:</span>
+        <pre style="font-size: 12px; margin-bottom: 2px; background-color: transparent; border: none;">{{alert.trace}}</pre>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>
+

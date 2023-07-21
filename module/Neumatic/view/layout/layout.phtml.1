@@ -1,0 +1,43 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>RPM Deployment Tool</title>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+        
+        <link rel="stylesheet" type="text/css" href="/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="/css/RangeMenu.css" />
+        <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
+        
+        <link rel="stylesheet" type="text/css" href="/js/ext/resources/ext-theme-neptune/ext-theme-neptune-all.css" />
+        
+        <script type="text/javascript" src="/js/ext/ext-all-debug.js"></script>
+        <script type="text/javascript" src="/js/App.js"></script>
+        <script type="text/javascript" src="/js/functions.js"></script>
+        <script type="text/javascript" src="/js/LoginsGridPanel.js"></script>
+         <script type='text/javascript'>
+              Ext.namespace('RDT');
+              RDT.release = '<?=$release?>';
+              RDT.env = '<?=$env?>';
+              RDT.user = {
+                  id:          '<?php //$user->get('id')?>',
+                  firstName:   '<?php //$user->get('firstName')?>',
+                  lastName:    '<?php //$user->get('lastName')?>',
+                  userName:    '<?php //$user->get('userName')?>',
+                  email:       '<?php //$user->get('email')?>'
+              };
+              
+          </script>
+        <!-- Scripts -->
+        
+
+    </head>
+    <body>
+       
+        <div class="contentContainer">
+            <?php echo $this->content; ?>
+        </div>
+    </body>
+</html>

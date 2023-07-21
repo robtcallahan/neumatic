@@ -1,0 +1,74 @@
+/* tree */
+.node {
+    margin: 0;
+    padding: 0;
+}
+.uiTree {
+    list-style-type: none;
+    margin-left: 10px;
+    padding-bottom: 3px;
+
+    font-size: 14px;
+}
+
+.uiTree li {
+    border-bottom: 1px solid #dddddd;
+}
+
+.uiTree li div.collapsed {
+    background-image: url("../images/glyphicons/glyphicons/png/glyphicons_440_folder_closed.png");
+    background-size: 22px 18px;
+    width: 22px;
+    height: 18px;
+}
+.uiTree li div.expanded {
+    background-image: url("../images/glyphicons/glyphicons/png/glyphicons_144_folder_open.png");
+    background-size: 22px 18px;
+    width: 22px;
+    height: 18px;
+}
+.uiTree li div.leaf {
+    background-image: url("../images/server.png");
+    background-size: 22px 18px;
+    width: 22px;
+    height: 18px;
+}
+
+.uiTree li a.icon {
+    display: inline-block;
+    width: 24px;
+    margin-right: 8px;
+    cursor: pointer;
+    vertical-align: text-bottom;
+}
+
+.uiTree li a.action {
+    cursor: pointer;
+    vertical-align: text-bottom;
+}
+
+.uiTree li .node:hover > a.addChild {
+    display: inline-block;
+}
+
+.uiTree li a.addChild {
+    margin-left: 10px;
+    cursor: pointer;
+    /*display: none;*/
+    vertical-align: text-bottom;
+}
+
+.uiTree li .node {
+    cursor: pointer;
+    padding-bottom: 3px;
+}
+
+.uiTree span.nodeLabel {
+    cursor: default;
+}
+
+.uiTree span.nodeLabel.selected {
+    border: 1px solid #aaa;
+    background-color: #ddd;
+    padding: 1px 3px;
+}

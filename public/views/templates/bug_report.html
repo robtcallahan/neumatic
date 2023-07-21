@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <h3 id="bug-report-form">NeuMatic Bug/Feedback Report</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <!-- Type -->
+        <div class="form-group">
+            <label for="fb-issueType"
+                   class="col-lg-3 control-label">Type</label>
+
+            <div class="col-lg-9">
+                <select class="form-control"
+                        id="fb-issueType"
+                        ng-model="bugReport.issueType"
+                        ng-options="issueType.name for issueType in issueTypes"></select>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="form-group">
+            <label for="fb-summary"
+                   class="col-lg-3 control-label">Summary</label>
+
+            <div class="col-lg-9">
+                <input class="form-control"
+                       id="fb-summary"
+                       ng-model="bugReport.summary"
+                       ng-required="true" />
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="fb-description"
+                   class="col-lg-3 control-label">Description</label>
+
+            <div class="col-lg-9">
+                <textarea rows="4"
+                          cols="60"
+                          class="form-control"
+                          id="fb-description"
+                          ng-model="bugReport.description"
+                          ng-required="true"></textarea>
+            </div>
+        </div>
+
+        <!-- Acceptance Criteria -->
+        <div class="form-group">
+            <label for="fb-acceptance-criteria"
+                   class="col-lg-3 control-label">Acceptance Criteria</label>
+
+            <div class="col-lg-9">
+                <textarea rows="4"
+                          cols="60"
+                          class="form-control"
+                          id="fb-acceptance-criteria"
+                          ng-model="bugReport.acceptanceCriteria"
+                          ng-required="true"></textarea>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="bugReport.issueType === '' || bugReport.summary === '' || bugReport.description === ''" ng-click="submit()">Submit</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

@@ -1,0 +1,102 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top" style="width:1024px;">
+	
+	
+	
+	
+	
+	<div style="width:1024px">	
+		<div style="float:left;" ">
+			<h3>Cookbook: {{cookbookName}}</h3>
+			<br>
+		</div>
+		<div id="editCookbookButtons" style="float: right; margin-right: 100px; margin-top: 20px;">
+			
+	        <button class="btn btn-success"
+	            tooltip-placement="bottom"
+	            tooltip="Return to previous page"
+	            ng-click="back()">Back
+	       </button>
+		</div>
+	</div>
+	<br /><br /><br /><br />
+    
+    
+    <h4>Installed Versions</h4>
+    <table class="table">
+		<tr>
+			<th>Version</th>
+			
+			<th>Action</th>
+		</tr>
+		<tbody ng-repeat="version in versions | limitTo: versionsLimit">
+			<tr>
+				<td><b>{{version}}</b></td>
+			
+				<td nowrap class="actions-cell">
+				<button class="btn btn-success" 
+				ng-disabled="!authorizedEdit"
+				ng-click="deleteCookbookVersion(version)">
+					&nbsp; Delete &nbsp;
+				</button>
+				</td>
+			</tr>
+		</tbody>
+		<tbody><tr><td colspan=2><br /><center>
+				<button class="btn btn-success" 
+					ng-hide="hideShowAllVersions"
+					ng-click="toggleAllVersions()">
+					&nbsp; Show All &nbsp;
+				</button>
+				<button class="btn btn-success" 
+					ng-hide="hideShowTenVersions"
+					ng-click="toggleAllVersions()">
+					&nbsp; Show 10 &nbsp;
+				</button></center>
+			</td>
+		</tr></tbody>
+	</table>
+	<br /><br />
+    <h4>Git Tags</h4>
+    <table class="table">
+		<tr>
+			<th>Tag Name</th>
+			
+			<th>Action</th>
+		</tr>
+		<tbody ng-repeat="tag in cookbookGitTags | limitTo: tagsLimit">
+			<tr>
+				<td><b>{{tag.name}}</b></td>
+			
+				<td nowrap class="actions-cell">
+				<button class="btn btn-success" 
+				ng-disabled="!authorizedEdit"
+				ng-click="importGitTag(tag.name)">
+					&nbsp; Add &nbsp;
+				</button>
+				</td>
+			</tr>
+		</tbody>
+		<tbody><tr><td colspan=2><br /><center>
+				<button class="btn btn-success" 
+					ng-hide="hideShowAllTags"
+					ng-click="toggleAllTags()">
+					&nbsp; Show All &nbsp;
+				</button>
+				<button class="btn btn-success" 
+					ng-hide="hideShowTenTags"
+					ng-click="toggleAllTags()">
+					&nbsp; Show 10 &nbsp;
+				</button></center>
+			</td>
+		</tr></tbody>
+	</table>
+    <center><img  id="loading-spinner"  src="../images/spinner-clock-blue.gif"/></center>
+    <hr>
+
+</div>
+<footer></footer>
+

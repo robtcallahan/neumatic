@@ -1,0 +1,61 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <h2>Chef Nodes</h2>
+    <div class="form-group col-lg-12" style="margin: 10px 0 10px 0;">
+        <label for="chefServer" class="col-lg-1 control-label">Chef Server</label>
+        <div class="col-lg-4">
+            <select class="form-control"
+                    style="padding: 2px 6px; height: 28px; font-size: 12px;"
+                    id="chefServer"
+                    ng-model="chefServerSelected"
+                    ng-options="s.displayValue for s in chefServers"
+                    ng-change="chefServerChange()"></select>
+        </div>
+        <div class="col-lg-offset-5 col-lg-1">
+            <img id="loading-spinner" class="loading-spinner" style="width:30px; height:30px;" src="../images/spinner-clock-blue.gif"/>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <table-pager input="nodes" output="pagedData" predicate="predicate" reverse="reverse"></table-pager>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <th><a href="" ng-click="predicate = 'hostname'; reverse = !reverse;">Name</a></th>
+            <th><a href="" ng-click="predicate = 'ohaiTime'; reverse = !reverse;">Last Report</a></th>
+            <th><a href="" ng-click="predicate = 'chefServer'; reverse = !reverse;">Chef Server</a></th>
+            <th><a href="" ng-click="predicate = 'chefVersion'; reverse = !reverse;">Chef Version</a></th>
+            <th><a href="" ng-click="predicate = 'environment'; reverse = !reverse;">Environment</a></th>
+            <th><a href="" ng-click="predicate = 'role'; reverse = !reverse;">Role</a></th>
+            <th><a href="" ng-click="predicate = 'memory'; reverse = !reverse;">Mem(GB)</a></th>
+            <th><a href="" ng-click="predicate = 'numCpu'; reverse = !reverse;">Num CPU</a></th>
+            <th><a href="" ng-click="predicate = 'os'; reverse = !reverse;">OS</a></th>
+            <th><a href="" ng-click="predicate = 'manufacturer'; reverse = !reverse;">Manufacturer</a></th>
+            <th><a href="" ng-click="predicate = 'model'; reverse = !reverse;">Model</a></th>
+        </tr>
+        <tr ng-repeat="node in pagedData">
+            <td>{{$index + 1}}</td>
+            <td><a href="" ng-click="editNode(node)">{{node.hostname}}</a></td>
+            <td ng-class="node.ohaiTimeStatus">{{node.ohaiTimeDiffString}}</td>
+            <td>{{node.chefServerName}}</td>
+            <td ng-class="node.chefVersionStatus">{{node.chefVersion}}</td>
+            <td><!--suppress HtmlUnknownAnchorTarget -->
+                <a href="/#/environments/{{node.environment}}">{{node.environment}}</a></td>
+            <td><!--suppress HtmlUnknownAnchorTarget -->
+                <a href="/#/roles/{{node.role}}">{{node.role}}</a></td>
+            <td>{{node.memory}}</td>
+            <td>{{node.numCpu}}</td>
+            <td>{{node.os}}</td>
+            <td>{{node.manufacturer}}</td>
+            <td>{{node.model}}</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

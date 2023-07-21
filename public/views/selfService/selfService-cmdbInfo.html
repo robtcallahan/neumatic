@@ -1,0 +1,69 @@
+<div class="form-group">
+    <label for="businessService" class="{{labelClass}} control-label">Business Service</label>
+
+    <div class="{{inputClass}}">
+        <input type="text"
+               id="businessService"
+               ng-model="server.businessService"
+               placeholder="Enter BS string like NPAC, OMS, etc"
+               typeahead="bs as bs.name for bs in getBusServicesForTypeAhead($viewValue)"
+               typeahead-editable="false"
+               typeahead-min-length="3"
+               typeahead-wait-ms="750"
+               typeahead-loading="loadingBusServices"
+               typeahead-on-select="getSubsystems(server)"
+               typeahead-template-url="typeaheadTemplate.html"
+               ng-change="checkFields('cmdb')"
+               class="form-control">
+        <i ng-show="loadingBusServices" class="glyphicon glyphicon-refresh"></i>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="subsystem" class="{{labelClass}} control-label">Subsystem</label>
+
+    <div class="{{inputClass}}">
+        <select id="subsystem"
+                class="form-control"
+                ng-model="server.subsystem"
+                ng-disabled="!server.businessService"
+                ng-change="checkFields('cmdb')"
+                ng-options="subsystem.name for subsystem in subsystems">
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="cmdbEnvironment" class="{{labelClass}} control-label">Environment</label>
+
+    <div class="{{inputClass}}">
+        <select id="cmdbEnvironment"
+                class="form-control"
+                ng-model="server.cmdbEnvironment"
+                ng-change="checkFields('cmdb')"
+                ng-options="cmdbEnvironment for cmdbEnvironment in cmdbEnvironments">
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="description" class="{{labelClass}} control-label">Description</label>
+
+    <div class="{{inputClass}}">
+        <input id="description"
+               class="form-control"
+               ng-model="server.description" placeholder="Optional" />
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-6 col-xs-offset-3">
+        <button id="cmdb-next-button"
+           ng-disabled="nextDisabled.cmdb"
+           ng-click="next('selfService.serverGroups')"
+           class="btn btn-selfService btn-block btn-info">
+           Next
+           <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </button>
+    </div>
+</div>

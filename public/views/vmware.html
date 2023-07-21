@@ -1,0 +1,14 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container servers-table pad-top">
+    <h2 style="margin: 20px 0;">Admin: VMware Infrastructure</h2>
+
+    <ui-tree ng-model="dataCenters" load-fn="loadChildren" expand-to="hierarchy" selected-id="1"
+             attr-node-id="uid" attr-children-type="childrenType" attr-site="vSphereSite" line-num="1">
+    </ui-tree>
+</div>
+
+<hr>
+<footer></footer>

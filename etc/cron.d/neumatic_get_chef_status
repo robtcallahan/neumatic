@@ -1,0 +1,2 @@
+# Get the chef status for all neumatic servers
+* * * * * stsapps /var/www/html/neumatic/module/Neumatic/bin/get_chef_status.php > /var/www/html/neumatic/log/get_chef_status.log 2>&1

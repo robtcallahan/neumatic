@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" ng-app="NeuMatic">
+    <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+    <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+    <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+    <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Rob Callahan, Steve Clark & Mike Kelley">
+
+    <title>NeuMatic</title>
+
+    <link rel='stylesheet' href='styles/fonts.css'>
+    <link rel="stylesheet" href="styles/font-awesome-4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css" />
+
+
+    <link rel="stylesheet" href="styles/neumatic.css"/>
+    <link rel="stylesheet" href="styles/environment.css"/>
+
+    <!-- used for VMWare page for now -->
+    <link rel="stylesheet" href="styles/tree.css"/>
+
+    <!-- used in the chef environments edit page for eg. -->
+    <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control.css"/>
+    <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control-attribute.css"/>
+
+    <link rel="stylesheet" href="styles/selfService.css";
+
+
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <!-- Page Mask for use when saving or building -->
+    <div id="page-mask" class="page-mask"></div>
+
+    <!-- Add your site or application content here -->
+    <div ui-view></div>
+
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+
+    <!-- build:js scripts/plugins.js -->
+    <!--
+    <script src="bower_components/sass-bootstrap/js/affix.js"></script>
+    <script src="bower_components/sass-bootstrap/js/button.js"></script>
+    <script src="bower_components/sass-bootstrap/js/carousel.js"></script>
+    <script src="bower_components/sass-bootstrap/js/transition.js"></script>
+    <script src="bower_components/sass-bootstrap/js/collapse.js"></script>
+    <script src="bower_components/sass-bootstrap/js/dropdown.js"></script>
+    <script src="bower_components/sass-bootstrap/js/scrollspy.js"></script>
+    <script src="bower_components/sass-bootstrap/js/tab.js"></script>
+    <script src="bower_components/sass-bootstrap/js/tooltip.js"></script>
+    <script src="bower_components/sass-bootstrap/js/popover.js"></script>
+    <script src="bower_components/sass-bootstrap/js/collapse.js"></script>
+    <script src="bower_components/sass-bootstrap/js/alert.js"></script>
+    -->
+    <script src="bower_components/sass-bootstrap/js/modal.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/modules.js -->
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="bower_components/angular-dragdrop/angular-dragdrop.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="bower_components/angular-tree-control/angular-tree-control.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angularjs-scope.safeapply/src/Scope.SafeApply.js"></script>
+
+    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+
+    <!-- <script src="bower_components/trNgGrid/release/src/js/trNgGrid.js"></script> -->
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/services/alertService.js"></script>
+    <script src="scripts/services/authedUserService.js"></script>
+    <script src="scripts/services/jiraService.js"></script>
+    <script src="scripts/services/neumaticService.js"></script>
+    <script src="scripts/services/BuildService.js"></script>
+    <script src="scripts/services/nodeService.js"></script>
+    <script src="scripts/services/serverStatusService.js"></script>
+
+    <script src="scripts/directives/neumaticDirectives.js"></script>
+    <script src="scripts/directives/gridDirectives.js"></script>
+    <script src="scripts/directives/pagingDirectives.js"></script>
+    <script src="scripts/directives/uiTreeDirectives.js"></script>
+    <script src="scripts/directives/miscDirectives.js"></script>
+
+    <script src="scripts/filters/paging.js"></script>
+
+    <script src="scripts/controllers/addCookbookController.js"></script>
+    <script src="scripts/controllers/auditController.js"></script>
+    <script src="scripts/controllers/addCookbookFormController.js"></script>
+    <script src="scripts/controllers/consoleController.js"></script>
+    <script src="scripts/controllers/cookbooksController.js"></script>
+    <script src="scripts/controllers/deleteNodeController.js"></script>
+    <script src="scripts/controllers/editCookbookController.js"></script>
+    <script src="scripts/controllers/editEnvironmentController.js"></script>
+    <script src="scripts/controllers/editEnvironmentCookbookVersionController.js"></script>
+    <script src="scripts/controllers/editNodeController.js"></script>
+    <script src="scripts/controllers/editRoleController.js"></script>
+    <script src="scripts/controllers/editServerController.js"></script>
+    <script src="scripts/controllers/environmentsController.js"></script>
+    <script src="scripts/controllers/helpController.js"></script>
+    <script src="scripts/controllers/leasesController.js"></script>
+    <script src="scripts/controllers/mainController.js"></script>
+    <script src="scripts/controllers/nodesController.js"></script>
+    <script src="scripts/controllers/quotasController.js"></script>
+    <script src="scripts/controllers/rolesController.js"></script>
+    <script src="scripts/controllers/selfServiceController.js"></script>
+    <script src="scripts/controllers/serversController.js"></script>
+    <script src="scripts/controllers/usersController.js"></script>
+    <script src="scripts/controllers/teamsController.js"></script>
+    <script src="scripts/controllers/vlansController.js"></script>
+    <script src="scripts/controllers/vmwareController.js"></script>
+
+    <script src="scripts/controllers/util/bootstrapController.js"></script>
+
+    <script src="scripts/controllers/reports/buildsController.js"></script>
+    <script src="scripts/controllers/reports/nodesController.js"></script>
+    <script src="scripts/controllers/reports/usersController.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

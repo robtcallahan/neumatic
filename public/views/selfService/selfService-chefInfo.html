@@ -1,0 +1,56 @@
+<!--
+    
+<div class="form-group">
+	<label for="cobblerDistro" class="{{labelClass}} control-label">Operating System</label>
+
+    <div class="{{inputClass}}">
+        <select class="form-control"
+                id="cobblerDistro"
+                ng-model="server.cobblerDistro"
+                ng-change="checkFields('chef'); cobblerDistroSelected()"
+                ng-options="cobblerDist as cobblerDist.name for cobblerDist in cobblerDistros">
+        </select>
+    </div>
+	
+</div>
+-->
+<!-- Chef Role -->
+<div class="form-group">
+    <label for="chefRole" class="{{labelClass}} control-label">Chef Role</label>
+
+    <div class="{{inputClass}}">
+        <select class="form-control"
+                id="chefRole"
+                ng-model="server.chefRole"
+                ng-change="checkFields('chef')"
+                ng-options="role for role in chefRoles">
+        </select>
+    </div>
+</div>
+
+<!-- Chef Environment -->
+<div class="form-group">
+    <label for="chefEnv" class="{{labelClass}} control-label">Chef Env</label>
+
+    <div class="{{inputClass}}">
+        <select class="form-control"
+                id="chefEnv"
+                ng-change="checkFields('chef')"
+                ng-model="server.chefEnv"
+                ng-options="env for env in chefEnvs">
+        </select>
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <div class="col-xs-6 col-xs-offset-3">
+        <button id="chef-next-button"
+           ng-disabled="nextDisabled.chef || nextDisabled.build"
+           ng-click="next('selfService.build')"
+           class="btn btn-selfService btn-block btn-info">
+           Build
+           <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </button>
+    </div>
+</div>

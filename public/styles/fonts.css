@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Architects Daughter';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Architects Daughter'), local('ArchitectsDaughter'), url(fonts/ArchitectsDaughter.woff) format('woff');
+}
+@font-face {
+  font-family: 'Covered By Your Grace';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Covered By Your Grace'), local('CoveredByYourGrace'), url(fonts/CoveredByYourGrace.woff) format('woff');
+}
+@font-face {
+  font-family: 'Schoolbell';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Schoolbell'), url(fonts/SchoolBell.woff) format('woff');
+}
+@font-face {
+  font-family: 'Shadows Into Light';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Shadows Into Light'), local('ShadowsIntoLight'), url(fonts/ShadowsIntoLight.woff) format('woff');
+}

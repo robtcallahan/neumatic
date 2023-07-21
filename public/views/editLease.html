@@ -1,0 +1,112 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top">
+
+    <div class="editServerHeading">
+        <div class="" style="right:50px;position:fixed;z-index:1000;background-color:#E6EFFC;">
+            <form class="" role="form" style="margin:0; padding:0">
+                <div>
+                    <button class="btn btn-success"
+                            ng-click="save()"
+                            tooltip-placement="left"
+                            tooltip="Save changes">Save
+                    </button>
+                    <button class="btn btn-warning"
+                            tooltip-placement="left"
+                            tooltip="Cancel edits and return to leases page"
+                            ng-click="cancel()">Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="serverName">{{server.name}}</div>
+    </div>
+
+    <div class="col-xs-12 status-row">
+        <span class="serverStatus">{{statusText}}
+            <img id="mask-spinner" class="mask-spinner" ng-show="buildRunning" src="../images/spinner-clock-blue.gif"/>
+        </span>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="leaseStart" class="col-xs-3 control-label">Lease Start</label>
+                <div class="col-xs-9">
+                    <input id="leaseStart"
+                           class="form-control"
+                           ng-enter="save()"
+                           ng-model="lease.leaseStart">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="leaseEnd" class="col-xs-3 control-label">Lease End</label>
+                <div class="col-xs-9">
+                    <input id="leaseEnd"
+                           disabled="true"
+                           class="form-control"
+                           ng-model="lease.leaseEnd">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="leaseDuration" class="col-xs-3 control-label">Lease Duration</label>
+                <div class="col-xs-9">
+                    <input id="leaseDuration"
+                           class="form-control"
+                           ng-enter="save()"
+                           ng-model="lease.leaseDuration">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="expired" class="col-xs-3 control-label">Expired</label>
+                <div class="col-xs-9">
+                    <input id="expired"
+                           class="form-control"
+                           ng-enter="save()"
+                           ng-model="lease.expired">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+
+            <div class="form-group">
+                <label for="extensionInDays" class="col-xs-3 control-label">Extension Length</label>
+                <div class="col-xs-9">
+                    <input id="extensionInDays"
+                           class="form-control"
+                           ng-enter="save()"
+                           ng-model="lease.extensionInDays">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="numExtensionsAllowed" class="col-xs-3 control-label">Num Extensions Allowed</label>
+                <div class="col-xs-9">
+                    <input id="numExtensionsAllowed"
+                           class="form-control"
+                           ng-enter="save()"
+                           ng-model="lease.numExtensionsAllowed">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="numTimesExtended" class="col-xs-3 control-label">Times Extended</label>
+                <div class="col-xs-9">
+                    <input id="numTimesExtended"
+                           class="form-control"
+                           ng-enter="save()"
+                           ng-model="lease.numTimesExtended">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+<footer></footer>

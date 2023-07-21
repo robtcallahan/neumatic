@@ -1,0 +1,30 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <h2 style="margin: 20px 0;">Admin: Delete Chef Node</h2>
+    <img id="loading-spinner" class="loading-spinner" src="../images/spinner-clock-blue.gif"/>
+
+    <label>Node Name: <input type="text" size="32" ng-model="nodeName"></label>
+    <button class="btn btn-success" ng-click="search()">Search</button>
+    <br>
+    <br>
+    <table class="table" ng-show="servers.length > 0">
+        <tr>
+            <th><a href="">Chef Server</a></th>
+            <th><a href="">Status</a></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr ng-repeat="server in servers">
+            <td>{{server.name}}</td>
+            <td>{{server.nodeExists}}</td>
+            <td>
+                <button ng-show="server.nodeExists === true" class="btn btn-danger" ng-click="deleteNode(server)">Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

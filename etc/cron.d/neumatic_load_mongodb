@@ -1,0 +1,3 @@
+# Get the chef status for all neumatic servers
+0 * * * * stsapps /var/www/html/neumatic/module/Neumatic/bin/load_mongo.php > /var/www/html/neumatic/log/load_mongo.log 2>&1
+30 * * * * stsapps /var/www/html/neumatic/module/Neumatic/bin/load_mongo_all.php > /var/www/html/neumatic/log/load_mongo_all.log 2>&1

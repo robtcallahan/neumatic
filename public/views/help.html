@@ -1,0 +1,123 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+
+<!-- Content -->
+<div class="container pad-top">
+
+    <h3 id="getting-started">Getting Started</h3>
+
+    <h4>Setup your Chef workstation</h4>
+
+    <p>Follow these procedures to create an account on our lab Chef server and turn your laptop
+    into a Chef workstation.</p>
+
+    <ul>
+        <li>Click on your username in the upper right of the page.</li>
+        <li>The page shows your personal information and at the bottom you'll see the Chef User
+        attribute with a value of true or false. If it is false, then you need to create a Chef account.</li>
+        <li>Click the button next it called "Create Chef Account". </li>
+        <li>If successful, you'll see your new private key and instructions on setting up a Linux or Mac Chef
+        workstation. (Windows instructions coming soon)</li>
+        <li>Following the instructions on the page to setup your Chef workstation.</li>
+        <li>Be sure to copy and paste your private key as instructed on the page. It will
+        only be shown here once. You can regenerate your private key later though if you need to.</li>
+        <li>If you already have a Chef account, you'll have 2 buttons next to Chef User: Regenerate Private Key
+        and Delete Chef Account. If you did not copy your private key or have lost it, you can regenerate one
+        using this first button.</li>
+    </ul>
+
+    <h4>Creating a New VM</h4>
+
+    Once your Chef workstation is setup, you will need a place to test out your Chef recipes. The following
+    procedure explains how to create a new VM. You are allowed a maximum of 3 VMs.
+
+    <ul>
+        <li>In NeuMatic, click on the Systems menu at the top.</li>
+        <li>Click the "New System" button at the upper right. </li>
+        <li>
+            You are presented with a form that defines the VM configuration. Most of the
+            values on the form is presented as information only and are not editable.
+        </li>
+        <li>
+            Note that the hostname and IP address are pre-assigned as these
+            are coming from a reserved pool of names & IPs and cannot be changed on this development server.
+        </li>
+        <li>
+            You  will need to fill the following fields:
+            <ul>
+                <li>VM Size: Choose from Small, Medium or Large</li>
+                <li>Cobbler Distro: Choose either CentOS 5.8 or 6.3.</li>
+                <li>Cobbler KS: the kickstart file should be automatically selected base upon the chosen Cobbler
+                    distribution. baseline.ks is for 5.8 and baseline_6.ks is for 6.3</li>
+                <li>Chef Role: Only the neu_base role is supported at this time.</li>
+                <li>Chef Env: Only the ST_CORE_LAB environment is supported at this time.</li>
+            </ul>
+        </li>
+        <li>
+            After you've finished making your selections, click the "Save" button at the top. You will be returned
+            to the Systems page and you'll see your new VM configuration listed. You are allowed to create up
+            to 3 of these.
+        </li>
+        <li>To build a VM, simply click the Build button in the Actions column. </li>
+        <li>
+            You should see status updates as the build progresses and when it's complete the status will say Built.
+            It will take between 3 and 4 minutes to finish at which point you can log in.
+        </li>
+        <li>
+            Note that even though the server is up and running, it will take a few minutes for the chef-client
+            process to finish installing the recipes in neu_base.
+        </li>
+    </ul>
+
+    <h4>Build Details</h4>
+    <p>
+        When the Build button is clicked, the VMWare ESX server cluster is queried to see if this hostname already
+        exists. If so, you will be prompted to continue. The VM configuration is then created on the ESX cluster.
+        Next, the host is added to LDAP. Then, a Cobbler system configuration is created and the VM is powered on.
+        Cobbler responds to the PXE boot and loads the selected OS distribution. At the end of this install,
+        and after a reboot, the chef-client is run and passed the role and environment from the configuration.
+        For development purposes, only the neu_base cookbook is run. This cookbook includes the following recipes:
+    </p>
+    <ul>
+        <li>ohai</li>
+        <li>yum</li>
+        <li>neuauth</li>
+        <li>neustar_compliance</li>
+        <li>ntp</li>
+        <li>check_mk</li>
+        <li>snmp</li>
+        <li>tripwire</li>
+        <li>logrotate</li>
+        <li>rsyslog</li>
+        <li>postfix</li>
+        <li>resolver</li>
+        <li>cron</li>
+    </ul>
+
+
+    <h4>Logging into your VM</h4>
+    <p>
+        You should also be able to log into the VM using your LDAP username and password. However, your
+        sudo rights will not work just yet. This will be fixed in the next release. You can su as root
+        and use the default root password for newly-built systems. If you do not know this password, contact
+        Rob Callahan or Steve Clark to obtain it.
+    </p>
+
+    <p>
+        Please note that this is a beta release of NeuMatic. There are many more releases to come so please bear
+        with us as we continue to provide more features and improve your experience. Should you have any problems,
+        questions or feedback, please let us know. We will address serious bugs promptly and take all
+        suggestions seriously.
+    </p>
+    <p>
+        Please submit all bugs, questions and feedback using JIRA and select the
+        <a href="https://jira.nexgen.neustar.biz/browse/HBA#selectedTab=com.atlassian.jira.plugin.system.project%3Aissues-panel"
+           tooltip-placement="top"
+           tooltip="Take me to your JIRA">Host Build Automation
+        </a> project.
+    </p>
+</div>
+
+<hr>
+<footer></footer>

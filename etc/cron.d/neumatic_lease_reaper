@@ -1,0 +1,2 @@
+# Get the chef status for all neumatic servers
+0 6 * * * stsapps /var/www/html/neumatic/module/Neumatic/bin/lease_reaper.php > /var/www/html/neumatic/log/lease_reaper.log 2>&1

@@ -1,0 +1,57 @@
+<div class="form-group"
+     ng-class="authedUser.userType === 'Admin' ? 'server-buttons-with-admin' : 'server-buttons'">
+    <button id="button-small"
+            class="server-btn server-small"
+            ng-click="serverSizeClick('Small')">
+        <div class="server-size-name">Tall</div>
+        <div class="server-size-info">
+            1 CPU<br>
+            2 GB Mem<br>
+            50 GB HD<br>
+        </div>
+    </button>
+    <button id="button-medium"
+            class="server-btn server-medium"
+
+            ng-click="serverSizeClick('Medium')">
+        <div class="server-size-name">Grande</div>
+        <div class="server-size-info">
+            2 CPU<br>
+            4 GB Mem<br>
+            50/120 GB HD<br>
+        </div>
+    </button>
+    <button id="button-large"
+            class="server-btn server-large"
+            ng-click="serverSizeClick('Large')">
+        <div class="server-size-name">Venti</div>
+        <div class="server-size-info">
+            4 CPU<br>
+            8 GB Mem<br>
+            50/250 GB HD<br>
+        </div>
+    </button>
+    <button ng-show="authedUser.userType == 'Admin'"
+            id="button-custom"
+            class="server-btn server-custom"
+            ng-click="serverSizeClick('Custom')">
+        <div class="server-size-name">Custom</div>
+        <div class="server-size-info">
+            x CPU<br>
+            x GB Mem<br>
+            x GB HD<br>
+        </div>
+    </button>
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-6 col-xs-offset-3">
+        <button id="vmsizes-next-button"
+           ng-disabled="nextDisabled.vmSize"
+           ng-click="next('selfService.chefInfo')"
+           class="btn btn-selfService btn-block btn-info">
+           Next
+           <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,313 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top" style="width:100%;">
+    <div class="col-lg-4">
+        <div style="margin-bottom:5px;">
+            <a href="http://www.wunderground.com/" target="_blank" title="Powered by WeatherUnderground">
+                <img src="../images/wundergroundLogo_4c_horz.png" width="90px"/>
+            </a>
+        </div>
+        <div>
+            Weather for {{weather.weatherLocation}}. &nbsp; {{weather.weatherTime}}
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td>Today:</td>
+                    <td><img src="{{weather.icon1}}" width="20" height="20"/></td>
+                    <td>{{weather.forecast1}}</td>
+                </tr>
+                <tr>
+                    <td>Tonight:</td>
+                    <td><img src="{{weather.icon2}}" width="20" height="20"/></td>
+                    <td>{{weather.forecast2}}</td>
+                </tr>
+                <tr>
+                    <td>Current:</td>
+                    <td><img src="{{weather.conditionsIcon}}" width="20" height="20"/></td>
+                    <td>{{weather.conditions}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- <div class="col-lg-6" style="padding-left:100px;"> -->
+    <div class="col-lg-4">
+        <div>
+            <img class="integral" src="../images/integralsign-reversed.png">
+            <span class="navbar-brand logo">Neustar(x) dx = NeuMatic</span>
+        </div>
+        <div>
+            <p class="tag-line">It slices... &nbsp; It dices... &nbsp; It's 3.0 approved!</p>
+        </div>
+    </div>
+
+    <div class="col-lg-1" style="padding:0;">
+        <div><span style="color:#008000;">NSR:</span> {{stock.price}}</div>
+        <div><span style="color:#008000;">Chg:</span> {{stock.change}} {{stock.changePct}}</div>
+    </div>
+
+    <div class="col-lg-3">
+        <div style="margin-bottom:5px;">
+            <span style="z-index:50;font-size:0.9em;">
+            <img src="http://theysaidso.com/branding/theysaidso.png"
+                 height="20" width="20" alt="theysaidso.com"/>
+            <a href="http://theysaidso.com" target="_blank" title="Powered by quotes from theysaidso.com"
+               style="color: #008000; margin-left: 4px; vertical-align: middle;">theysaidso.com</a>
+            </span>
+        </div>
+        "{{qotd.quote}}"
+        <div style="text-align:right;font-style:italic;">{{qotd.author}}</div>
+    </div>
+
+</div>
+
+<div class="row" style="margin: 10px;">
+    <div class="container pad-top col-lg-6">
+        <span style="margin-left:5px;font-size:15px;"><b>NeuMatic Server Stats</b></span>
+        <table class="table">
+            <tr>
+                <td>Last Update</td>
+                <td align="right">{{lastUpdate}}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td align="right">{{server.status}}</td>
+            </tr>
+            <tr>
+                <td>Load</td>
+                <td align="right">{{server.load}}</td>
+            </tr>
+            <tr>
+                <td>CPU</td>
+                <td align="right">{{server.cpu}}</td>
+            </tr>
+            <tr>
+                <td>Memory</td>
+                <td align="right">{{server.memory}}</td>
+            </tr>
+            <tr>
+                <td>Swap</td>
+                <td align="right">{{server.swap}}</td>
+            </tr>
+        </table>
+
+        <span style="margin-left:5px;font-size:15px;"><b>Monit Stats</b></span>
+        <table class="table">
+            <tr ng-repeat="mon in monitors">
+                <td>{{mon.host}}</td>
+                <td class="{{mon.statusClass}}">{{mon.status}}</td>
+                <td align="right">
+                    <span ng-repeat="proto in mon.protocols">
+                        <span style="margin-left:5px" class="{{proto.class}}">{{proto.text}}</span>
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="container pad-top col-lg-6">
+        <span style="margin-left:5px;font-size:15px;"><b>Build Stats</b></span>
+        <table class="table">
+            <tr>
+                <td>Total Servers</td>
+                <td align="right">{{stats.numServers}}</td>
+            </tr>
+            <tr>
+                <td>Num Building</td>
+                <td align="right">{{stats.numBuilding}}</td>
+            </tr>
+            <tr>
+                <td>Lab VMs</td>
+                <td align="right">{{stats.numLabServers}}</td>
+            </tr>
+            <tr>
+                <td>Total Builds</td>
+                <td align="right">{{stats.numBuilds}}</td>
+            </tr>
+            <tr>
+                <td>Num Users</td>
+                <td align="right">{{stats.numUsers}}</td>
+            </tr>
+            <tr>
+                <td>Logins this Month</td>
+                <td align="right">{{stats.numLoginsThisMonth}}</td>
+            </tr>
+            <tr>
+                <td>Logins this Week</td>
+                <td align="right">{{stats.numLoginsThisWeek}}</td>
+            </tr>
+        </table>
+
+        <span style="margin-left:5px;font-size:15px;"><b>Average Build Times</b></span>
+        <table class="table">
+            <tr>
+                <td>VMWare</td>
+                <td align="right">{{stats.avgTimeVmware}}</td>
+            </tr>
+            <tr>
+                <td>Standalone</td>
+                <td align="right">{{stats.avgTimeStandalone}}</td>
+            </tr>
+            <tr>
+                <td>Blade</td>
+                <td align="right">{{stats.avgTimeBlade}}</td>
+            </tr>
+            <tr>
+                <td>Remote</td>
+                <td align="right">{{stats.avgTimeRemote}}</td>
+            </tr>
+        </table>
+
+        <span style="margin-left:5px;font-size:15px;"><b>Common Cookbook Versions</b></span>
+        <table class="table">
+            <tr>
+                <td>build-neu_collection</td>
+                <td align="right">{{versions.build_neu_collection}}</td>
+            </tr>
+            <tr>
+                <td>neu_common</td>
+                <td align="right">{{versions.neu_common}}</td>
+            </tr>
+            <tr>
+                <td>neu_security</td>
+                <td align="right">{{versions.neu_security}}</td>
+            </tr>
+            <tr>
+                <td>neu_monitor</td>
+                <td align="right">{{versions.neu_monitor}}</td>
+            </tr>
+            <tr>
+                <td>neu_collector</td>
+                <td align="right">{{versions.neu_collector}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+        <!--
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>What is it?</h2>
+
+                <p>NeuMatic is the change in Neustar as automation goes from 2.0 to 3.0. </p>
+
+                <p>Automation is the key to speed, consistency and repeatability (reuse). These properties are critical to
+                    managing an infrastructure, whether it is comprised of a few servers (physical /virtual) or a few
+                    thousand servers. It is the objective of the Automation and Tools team to develop an infrastructure
+                    software application for a common host build automation and application deployment platform to be
+                    utilized across Neustar operations.
+                    This will create standardization, boost productivity, and provide efficient host management and a means
+                    to provision servers in a timely, reproducible and predictable manner.</p>
+            </div>
+            <div class="col-md-4">
+                <h2>How does it work?</h2>
+
+                <p>NeuMatic automates server builds from VM creation to baseline OS, third party and proprietary software
+                    installation
+                    utilizing Cobbler, Chef and a common, web service API. Platforms include bare metal HP chassis
+                    blades and VMWare virtual machines. Future supported platforms will include standalone hardware,
+                    Xen OR KVM hypervisors and AWS instances.</p>
+
+                <p>The UI is based on AngularJS and performs AJAX queries to the back end server which is a PHP Zend2
+                    web service. The web service access a variety of services including Cobbler, Chef, DNS, LDAP, GitLab, VMWare,
+                    HP SIM and the CMDB. Eventually, the web service API will
+                    be published so that it can be consumed in scripts for custom automation applications.</p>
+            </div>
+            <div class="col-md-4">
+                <h2>How do I use it?</h2>
+
+                <p>NeuMatic provides a self-service interface allowing you to create a Chef account on our lab
+                    Chef server, instructions on setting up a Chef workstation and to provision up to 3 VMs on our lab
+                    VMWare ESX cluster. This provides you with a Chef development environment were you can test out
+                    Chef recipes and cookbooks before deploying them to production. We'll soon provide a means to
+                    easily migrate your cookbooks, roles and environments to the Chef server of your choice.
+                </p>
+
+                <p>See the <a href="/#/help" tooltip-placement="top" tooltip="All your VM are belong to us">Getting
+                    Started</a> page for instructions.</p>
+
+                <p>Our goal is to provide a full self-service platform where you can provision new servers and deploy
+                    them to production, but this will be developed over time. More information can be found in our
+                    <a href="https://confluence.nexgen.neustar.biz/pages/viewpage.action?pageId=39925029"
+                       target="_blank"
+                       tooltip-placement="top"
+                       tooltip="Influence our Confluence">Host Build Automation
+                    </a> Confluence page.
+                </p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div style="text-align: center;">
+        <a href="/#/help">
+            <button id="get-started"
+                    class="btn btn-large btn-success"
+                    tooltip-placement="top"
+                    tooltip="Let's get this party started!">Get Started!
+            </button>
+        </a>
+    </div>
+    -->
+
+<!--
+<div class="container">
+    <h2>What Customers Are Saying</h2>
+
+    <div class="rating-block col-md-6" ng-repeat="rating in ratings">
+        <rating ng-model="rating.rating"
+                max="max"
+                readonly="true"
+                on-leave="overStar = null"
+                style="cursor:pointer;"></rating>
+        <div class="rating-block-user">
+            By <a href="/#/users/{{rating.userId}}">{{rating.firstName}} {{rating.lastName}}</a> on
+            {{rating.dateRated}}</span>
+        </div>
+        <div class="rating-block-comments">
+            {{rating.comments}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6" collapse="userRatingIsCollapsed">
+            <div class="col-lg-12">
+                <rating ng-model="rate"
+                        max="max"
+                        readonly="false"
+                        on-hover="hoveringOver(value)"
+                        on-leave="overStar = null"
+                        style="cursor:pointer;"></rating>
+                <span class="label"
+                      ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
+                      ng-show="overStar && !isReadonly">{{percent}}%</span>
+            </div>
+
+            <div class="col-lg-12 rating-block-user">
+                By <a href="/#/users/{{rating.userId}}">{{authedUser.firstName}} {{authedUser.lastName}}</a></span>
+            </div>
+
+            <div class="col-lg-12">
+                <textarea class="form-control"
+                          ng-model="comments"
+                          rows="4"
+                          placeholder="Write your comments here"></textarea>
+            </div>
+            <div class="col-lg-12">
+                <button class="btn btn-primary" ng-click="submitUserRating()">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-primary"
+                ng-show="userRatingIsCollapsed"
+                ng-click="userRatingIsCollapsed = false">Add Your Rating</button>
+    </div>
+</div>
+-->
+
+<hr/>
+<footer></footer>

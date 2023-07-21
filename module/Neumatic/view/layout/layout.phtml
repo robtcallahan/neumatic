@@ -1,0 +1,14 @@
+<?php 
+
+if(isset($_SERVER['REQUEST_URI']) AND $_SERVER['REQUEST_URI'] == '/'){
+    echo $this->doctype();
+    echo $this->content;
+} else {
+?>
+<div class="contentContainer">
+    <?php echo $this->content; ?>
+</div>
+
+<?php 
+}
+?>

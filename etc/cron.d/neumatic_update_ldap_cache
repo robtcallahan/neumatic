@@ -1,0 +1,2 @@
+# Update 
+0 0,3,6,9,12,15,18,21 * * * stsapps /var/www/html/neumatic/module/Neumatic/bin/update_ldap_cache.php > /var/www/html/neumatic/log/update_ldap_cache.log 2>&1

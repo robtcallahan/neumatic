@@ -1,0 +1,149 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top" style="width:1024px;">
+
+
+	<div >
+		<div  >
+			<h3>Node: {{nodeName}}</h3>
+			<br>
+		</div>
+
+		<div id="nodeButtons" style="float: right; margin-right: 100px; margin-top: -50px;">
+			<button class="btn btn-success"
+			ng-disabled="!authedUser.adminOn && !node.authorized"
+			tooltip-placement="bottom"
+			tooltip="Save this node"
+			ng-click="saveNode()">
+				Save
+			</button>
+			<button class="btn btn-success"
+			tooltip-placement="bottom"
+			tooltip="Return to previous page"
+			ng-click="back()">
+				Back
+			</button>
+		</div>
+	</div>
+	
+
+	<div class="row" >
+		<div class="{{rowClass}}">
+			<hr>
+			<div class="form-group">
+				<label for="environments" class="{{labelClass}} control-label">Environment:</label>
+
+				<div class="{{inputClass}}" style="">
+					<select class="form-control" style="float: left; width: 80%;" id="environments" ng-model="environmentSelected" required ng-options="env.name for env in environments">
+						<option value="">-- Select Environment --</option>
+					</select>
+
+				</div>
+
+			</div>
+			<div>
+			
+				<br />
+				<br />
+				<br />
+			</div>
+		</div>
+		
+	</div>
+
+	<div class="container" >
+		<h4>Manage Cookbooks</h4>
+		Drag roles and recipes to the run list.
+		<br />
+		<br />
+		<div style="float: left;">
+			<div style="border: 1px solid #ccc;">
+				Roles
+				<ul style="width: 300px; height: 200px; overflow: auto; padding:0; margin:0;"
+
+				ui-on-Drop="onDrop($event,$data,roles)">
+
+					<li class="roleDragBox" onmouseover="this.style.background='#ccc';" onmouseout="this.style.background='';"
+					ui-draggable="true" drag="role"
+					on-drop-success="dropSuccessHandler($event,$index,roles)"
+					ng-repeat="role in roles track by $index">
+						<div style="border: 1px solid #ccc;">
+							{{role.name}}
+						</div>
+					</li>
+				</ul>
+			</div>
+			&nbsp;
+			<div style="border: 1px solid #ccc;">
+				Recipes
+				<ul style="width: 300px; height: 200px; overflow: auto; padding:0; margin:0;"
+				ui-on-Drop="onDrop($event,$data,recipes)">
+					<li class="recipeDragBox"
+					onmouseover="this.style.background='#ccc';" onmouseout="this.style.background='';"
+					ui-draggable="true" drag="recipe"
+					on-drop-success="dropSuccessHandler($event,$index,recipes)"
+					ng-repeat="recipe in recipes track by $index">
+						<div style="border: 1px solid #ccc;">
+							{{recipe.name}}
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div style="float: left; margin-left: 150px;">
+			<div  style="width: 300px; height: 300px; border: 1px solid #ccc;">
+				Run List
+				<ul
+				ui-on-Drop="onDrop($event,$data,runlist)"
+				style="width: 300px; height: 300px; padding:0; margin:0;"
+				>
+
+					<li class="roleDragBox"
+					ng-class="{'recipeDragBox': runitem.type == 'recipe'} "
+
+					onmouseover="this.style.background='#ccc';" onmouseout="this.style.background='';"
+					ui-draggable="true" drag="runitem"
+					on-drop-success="dropSuccessHandler($event,$index,runlist)"
+					ng-repeat="runitem in runlist track by $index">
+						<div style="border: 1px solid #ccc;">
+							{{runitem.name}}
+						</div>
+
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
+
+	<hr />
+
+	<div  ng-hide="attributesTreeHidden">
+
+		<div style="float: left;">
+			<h4>Attributes</h4>
+		</div>
+		
+
+		<div style="clear: both;" >
+			<hr />
+			<treecontrol class="tree-light"
+			tree-model="attributesTree"
+			options="treeOptions"
+			selected-node="node2" >
+				<span> {{node.key}} <span ng-if="node.value != null">= {{node.value}}&nbsp; </span></span>
+				<hr style="margin-top: 6px; margin-bottom: 6px;"/>
+			</treecontrol>
+
+		</div>
+	</div>
+
+	<br />
+	<hr />
+
+</div>
+
+<footer></footer>

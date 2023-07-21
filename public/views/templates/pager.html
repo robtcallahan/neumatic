@@ -1,0 +1,46 @@
+<div style="width: 800px; margin-top: 10px; margin-bottom: 50px; border: 1px solid #999; border-radius: 4px; height: 33px;">
+    <div style="border-right: 1px solid #999; float:left; width: 240px; height: 30px;">
+        <input ng-model="searchText"
+               placeholder="Filter results..."
+               style="border: 1px solid #CCCCCC; border-radius: 4px; margin-top: 5px; margin-left: 20px; width: 190px; padding: 2px 6px;">
+    </div>
+
+    <div style="float:left; width: 300px; height: 30px;">
+        <span style="margin-left: 40px;">
+            <button ng-click="firstPage()" ng-disabled="!prevEnabled" style="margin-top: 5px;">&lt;&lt;</button>
+        </span>
+        <span style="margin-right: 10px">
+            <button ng-click="prevPage()" ng-disabled="!prevEnabled" style="margin-top: 5px;">&lt;</button>
+        </span>
+
+        <!-- Lines/Page: -->
+        <select ng-model="linesPerPage" style="margin-top: 5px; color: #555555;">
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>40</option>
+            <option>50</option>
+            <option>75</option>
+            <option>100</option>
+            <option>150</option>
+            <option>200</option>
+            <option>500</option>
+            <option>1000</option>
+            <option>2000</option>
+            <option>5000</option>
+        </select>
+
+        <span style="margin-left: 10px;">
+            <button ng-click="nextPage()" ng-disabled="!nextEnabled" style="margin-top: 5px;">&gt;</button>
+        </span>
+        <span style="margin-right: 10px;">
+            <button ng-click="nextPage()" ng-disabled="!nextEnabled" style="margin-top: 5px;">&gt;&gt;</button>
+        </span>
+    </div>
+
+    <div style="border-left: 1px solid #999; float:left; width: 240px; height: 30px;">
+        <div style="color: #333; margin-top: 5px; text-align: center;">
+            {{linesFrom}} - {{linesTo}} displayed, {{linesTotal}} in total
+        </div>
+    </div>
+</div>

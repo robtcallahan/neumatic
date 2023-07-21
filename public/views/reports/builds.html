@@ -1,0 +1,37 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top">
+    <div class="col-lg-9">
+        <h2 style="margin: 20px 0;">Reports: Build Metrics</h2>
+    </div>
+    <div class="col-lg-3">
+        <div class="col-sm-8">Avg Build Time VMware</div>
+        <div class="col-sm-4" style="text-align:right;">{{avgBuildTimes.vmware}}</div>
+        <div class="col-sm-8">Avg Build Time Blades</div>
+        <div class="col-sm-4" style="text-align:right;">{{avgBuildTimes.blades}}</div>
+    </div>
+    <img id="loading-spinner" class="loading-spinner" src="../../images/spinner-clock-blue.gif"/>
+</div>
+
+<div class="container" >
+    <table class="table">
+        <tr>
+            <th><a href="" ng-click="predicate = 'serverName'; reverse = !reverse;">Server</a></th>
+            <th><a href="" ng-click="predicate = 'serverType'; reverse = !reverse;">Server Type</a></th>
+            <th><a href="" ng-click="predicate = 'buildTimeSecs'; reverse = !reverse;">Date Built</a></th>
+            <th><a href="" ng-click="predicate = 'buildTime'; reverse = !reverse;">Build Time (secs)</a></th>
+        </tr>
+        <tr ng-repeat="metric in buildMetrics|orderBy:predicate:reverse">
+            <td>{{metric.serverName}}</td>
+            <td>{{metric.serverType}}</td>
+            <td>{{metric.dateBuilt}}</td>
+            <td>{{metric.buildTime}}</td>
+        </tr>
+    </table>
+</div>
+<hr>
+<footer></footer>
+
+

@@ -1,0 +1,168 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container pad-top">
+    <table class="table">
+        <tr><td>First Name</td><td>{{user.firstName}}</td></tr>
+        <tr><td>Last Name</td><td>{{user.lastName}}</td></tr>
+        <tr><td>User Name</td><td>{{user.username}}</td></tr>
+        <tr><td>User Type</td><td>{{user.userType}}</td></tr>
+        <tr><td>EMail</td><td><a href="mailto::{{user.email}}">{{user.email}}</a></td></tr>
+        <tr><td>Department</td><td>{{user.dept}}</td></tr>
+        <tr><td>Title</td><td>{{user.title}}</td></tr>
+        <tr><td>Office</td><td>{{user.office}}</td></tr>
+        <tr><td>Office Phone</td><td>{{user.mobilePhone}}</td></tr>
+        <tr><td>Mobile Phone</td><td>{{user.officePhone}}</td></tr>
+        <tr><td>Number of Logins</td><td>{{user.numLogins}}</td></tr>
+        <tr><td>Last Login</td><td>{{user.lastLogin}}</td></tr>
+        <tr><td>User Agent</td><td>{{user.userAgent}}</td></tr>
+        <tr><td>IP Address</td><td>{{user.ipAddr}}</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Max Pool Servers</td><td>{{user.maxPoolServers}}</td></tr>
+        <tr><td>Num Server Builds</td><td>{{user.numServerBuilds}}</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td colspan="2">
+            <img ng-show="loading" src="../images/spinner-clock-blue.gif"/>
+            <table class="table" ng-show="userId === authedUser.id || authedUser.userType === 'Admin'">
+                <tr>
+                    <td><b>Chef Server Environment</b></td>
+                    <td><b>Chef Server Name</b></td>
+                    <td><b>Actions</b></td>
+                </tr>
+                <tr ng-repeat="chefServer in user.chefServers">
+                    <td>{{chefServer.env}}</td>
+                    <td>{{chefServer.name}}</td>
+                    <td>
+                        <button class="btn btn-success"
+                                ng-show="chefServer.isUser && !processing && (authedUser.userType === 'Admin' || user.id === authedUser.id)"
+                                tooltip-placement="bottom"
+                                tooltip="Retrieve a new Chef server account key for my workstation"
+                                ng-click="regenPrivateKey(user, chefServer)">Regenerate Private Key
+                        </button>
+                        <button class="btn btn-danger"
+                                ng-show="chefServer.isUser && !processing && (authedUser.userType === 'Admin' || user.id === authedUser.id)"
+                                tooltip-placement="bottom"
+                                tooltip="I can't cook. I'm done with this whole Chef thing!"
+                                ng-click="deleteChefAccount(user, chefServer)">Delete Chef Account
+                        </button>
+                        <button class="btn btn-success"
+                                ng-show="!chefServer.isUser && !processing && (authedUser.userType === 'Admin' || user.id === authedUser.id)"
+                                tooltip-placement="bottom"
+                                tooltip="Retrieve a Chef server account key for my workstation"
+                                ng-click="createChefAccount(user, chefServer)">Create Chef Account
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </tr>
+    </table>
+
+    <div ng-show="showKeyAndProcedure">
+        <h4>Chef account creation successful for Chef server: {{accountCreatedOnServer}}!</h4>
+        <p>Follow the procedure below to setup a Chef workstation on your laptop.</p>
+        <h4>Private Key</h4>
+        <p>Your private key is shown here one time only. Please copy and save to your .chef/&lt;username&gt;.pem file.</p>
+        <label for="privateKey"></label>
+        <textarea id="privateKey" class="private-key">{{privateKey}}</textarea>
+
+        <br>
+
+        <h4>Setting up your Chef workstation</h4>
+        <ol>
+            <li>
+                Create a Chef workstation directory to work out of for this Chef server
+                <pre>
+                    laptop> mkdir -p chef/&lt;env&gt;/.chef
+                    laptop> cd chef/&lt;env&gt;/.chef
+                    laptop>
+                </pre>
+            </li>
+
+            <li>
+                Copy the private key shown above and paste it into a file called &lt;username&gt;.pem
+                in the chef/&lt;env&gt;/.chef directory
+            </li>
+
+            <li>Install the chef client
+                <pre>
+                    laptop> curl -L http://www.opscode.com/chef/install.sh | sudo bash
+                    # if you don't get a prompt after a couple of seconds, hit enter and
+                    # you should be prompted for the sudo password
+                </pre>
+            </li>
+
+            <li>
+                Test the install
+                <pre>
+                    laptop> chef-client -v
+                    Chef: 11.10.0
+                    laptop>
+                </pre>
+            </li>
+
+            <li>
+                Download the validation.pem which will allow you to talk to the chef server.
+                Substitute &lt;service&gt; for either core (for lab), npac, oms or enum
+                <pre>
+                    laptop> wget http://repo.va.neustar.com/opscode/&lt;service&gt;-dev/validation.pem
+                    laptop> chmod 600 *.pem
+                    laptop>
+                </pre>
+            </li>
+
+            <li>
+                Cut and paste your private key above and save it to &lt;username&gt;>.pem in the .chef directory
+            </li>
+
+            <li>
+                Dowload the knife.rb file
+                <pre>
+                    Substitute &lt;service&gt; for either core (for lab), npac, oms or enum
+                    laptop> wget http://repo.va.neustar.com/opscode/&lt;service&gt;-dev/knife.rb
+                    laptop>
+                </pre>
+            </li>
+
+            <li>
+                Edit the knife.rb file changing username from "juser" to your own username
+                <pre>
+                    laptop> vi knife.rb ....
+                    laptop>
+                </pre>
+            </li>
+
+            <li>
+                Test the connection<br>
+                Note to run any knife commands,you'll need to be somewhere under your chef/core-dev directory
+                otherwise chef client will not know what server to connect to, who you are, etc.
+                <pre>
+                    laptop> knife status
+                    135 hours ago, stlab1.va.neustar.com, stlab1.va.neustar.com, 10.31.46.54, centos 5.8.
+                    130 hours ago, stneumatic.va.neustar.com, stneumatic.va.neustar.com, 172.30.32.132, centos 6.3.
+                    117 hours ago, chopcprvftp01.nc.neustar.com, chopcprvftp01.nc.neustar.com, 10.90.16.139, centos 6.3.
+                    34 hours ago, stlabvm06.va.neustar.com, stlabvm06.va.neustar.com, 172.30.32.96, centos 6.3.
+                    25 hours ago, chopcprvftp02.nc.neustar.com, chopcprvftp02.nc.neustar.com, 10.90.16.140, centos 6.3.
+                    21 minutes ago, stopssbox1.va.neustar.com, stopssbox1.va.neustar.com, 172.30.18.51, solaris2 5.10.
+                    12 minutes ago, stlabvsts01.va.neustar.com, stlabvsts01.va.neustar.com, 172.30.32.103, centos 6.3.
+                    6 minutes ago, stopvprcw01.va.neustar.com, stopvprcw01.va.neustar.com, 10.31.87.16, centos 6.4.
+                    laptop>
+                </pre>
+            </li>
+
+            <li>
+                Download the cookbooks from the server
+                <pre>
+                    laptop> knife download /
+                    laptop>
+                </pre>
+            </li>
+        </ol>
+
+        You are now ready to create cookbooks and become skilled at using a knife.<br>
+        Please be careful not to cut yourself or anyone else. :-)
+    </div>
+</div>
+
+<hr>
+<footer></footer>

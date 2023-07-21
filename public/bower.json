@@ -1,0 +1,41 @@
+{
+    "name": "NeuMatic",
+    "version": "1.7.6",
+    "authors": [
+        "Rob Callahan <Rob.Callahan@neustar.biz>",
+        "Michael.Kelley <Michael.Kelley@neustar.biz"
+    ],
+    "description": "All your VM are belong to us",
+    "main": "index_ui.html",
+    "keywords": [
+        "automation"
+    ],
+    "license": "Neustar, Inc",
+    "homepage": "https://neumatic.ops.neustar.biz",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "angular": "~1.2.24",
+        "angular-bootstrap": "~0.11.0",
+        "angular-cookies": "~1.2.24",
+        "angular-mocks": "~1.2.24",
+        "angular-resource": "~1.2.24",
+        "angular-route": "~1.2.24",
+        "angular-sanitize": "~1.2.24",
+        "angular-scenario": "~1.2.24",
+        "angular-ui": "~0.4.0",
+        "angular-ui-router": "~0.2.11",
+        "at-table": "~1.0.1",
+        "es5-shim": "~4.0.3",
+        "jquery": "~2.1.1",
+        "json3": "~3.3.2",
+        "sass-bootstrap": "~3.0.0",
+        "trNgGrid": "~3.0.3"
+    }
+}

@@ -1,0 +1,82 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<script type="text/ng-template" id="typeaheadTemplate.html">
+  <a>
+      <span ng-bind-html="match.label"></span>
+  </a>
+</script>
+
+<!-- Content -->
+<div class="container pad-top">
+    <h2 style="margin: 20px 0;">Admin: VLANs</h2>
+    <img id="loading-spinner" class="loading-spinner" src="../images/spinner-clock-blue.gif"/>
+    <br>
+    <br>
+
+    <label for="distSwitch" class="col-lg-2 control-label">Distribution Switch</label>
+    <select class="col-lg-3"
+            id="distSwitch"
+            ng-model="distSwitch"
+            ng-change="getVlans(distSwitch.id)"
+            ng-options="distSwitch as distSwitch.displayValue for distSwitch in distSwitches">
+    </select>
+    <span class="col-lg-6"></span>
+
+    <div class="col-lg-12">
+        <table-pager input="vlans" output="pagedData" predicate="predicate" reverse="reverse"></table-pager>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th style="width:8px;"></th>
+            <th>ID</th>
+            <th>Network</th>
+            <th>Netmask</th>
+            <th>Gateway</th>
+            <th>Name</th>
+            <th>Enabled</th>
+        </tr>
+        <tr ng-repeat-start="vlan in pagedData">
+            <td style="cursor: pointer; width:20px; font-size: 18px;" ng-if="vlan.expanded" ng-click="vlan.expanded = false">-</td>
+            <td style="cursor: pointer; width:20px; font-size: 18px;" ng-if="!vlan.expanded" ng-click="vlan.expanded = true">+</td>
+            <td style="text-align: right; width:50px;">{{vlan.vlanId}} &nbsp; &nbsp; </td>
+            <td>{{vlan.network}}</td>
+            <td>{{vlan.netmask}}</td>
+            <td style="width:180px;"><editable-grid-input model="vlan.gateway" save="saveVlan(vlan)"></editable-grid-input></td>
+            <td><editable-grid-input model="vlan.name" save="saveVlan(vlan)"></editable-grid-input></td>
+            <td><input type="checkbox" ng-checked="vlan.enabled" ng-model="vlan.enabled" ng-change="saveVlan(vlan)"></editable-grid-checkbox></td>
+        </tr>
+        <tr ng-if="vlan.expanded" ng-repeat-end="">
+            <td colspan="2">&nbsp;</td>
+            <td colspan="6">
+                <table width="100%" class="table" style="margin-top: 20px;">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Business Service</th>
+                        <th>Environment</th>
+                    </tr>
+                    <tr ng-hide="vlan.businessServices">
+                        <td width="70px"><button ng-click="addBusinessService(vlan)">&nbsp; Add &nbsp;</button></td>
+                        <td colspan="2">No business services defined</td>
+                    </tr>
+                    <tr ng-repeat="bs in vlan.businessServices">
+                        <td width="70px"><button ng-click="deleteBusinessService($index, vlan)">Delete</button></td>
+                        <td width="300px">
+                            <editable-grid-business-service vlan="vlan" business-service="bs" index="$index" save="saveVlan(vlan)"></editable-grid-business-service>
+                        </td>
+                        <td>
+                            <editable-grid-environment vlan="vlan" business-service="bs"  index="$index" save="saveVlan(vlan)"></editable-grid-environment>
+                        </td>
+                    </tr>
+                    <tr ng-show="vlan.businessServices">
+                        <td colspan="3" width="70px"><button ng-click="addBusinessService(vlan)">&nbsp; Add &nbsp;</button></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

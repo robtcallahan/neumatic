@@ -1,0 +1,4 @@
+NeuMatic automates server builds from bare metal/baseline OS through proprietary software
+installation utilizing Cobbler, Chef and a common, web service API. Platforms will include
+bare metal HP chassis blades, standalone HP and IBM hardware, Xen, KVM and VMWare virtual
+machines and AWS instances. 

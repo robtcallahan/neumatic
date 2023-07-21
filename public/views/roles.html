@@ -1,0 +1,112 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+
+<!-- Content -->
+<div class="container environments-table pad-top" style="width:1024px;">
+	
+	 
+        <div style="width: 950px; margin-bottom: 60px;">
+            <div style="width:400px; float: left; ">
+            	<div style="align: left;">
+                    <label for="chefServer" style="word-wrap: break-word; float: left;">Chef Server</label><select style="float: right; width: 300px;" class="form-control" id="chefServer" ng-model="chefServerSelected" ng-options="s.displayValue for s in chefServers" ng-change="chefServerChange()"></select>
+                </div>
+           		<div style="align: left; margin-top: 50px; ">
+                    <label for="chefServer" style="margin-right: 53px;">Search</label><input ng-model="searchText">
+                </div>
+            </div>
+            <div style="float: right; ">
+		        <button class="btn btn-success"
+		        	ng-click="go('/roles/new')">
+		            &nbsp; New &nbsp;
+		        </button>
+		    </div>
+        </div>
+
+<!--	
+	 <div class="row" style="float:left; width: 500px; margin-bottom: 20px;">
+        <div class="{{rowClass}}" style="width: 100%">
+            <div class="form-group">
+                <label for="chefServer" class="{{labelClass}} control-label">Chef Server</label>
+
+                <div class="{{inputClass}}">
+                    <select class="form-control" id="chefServer" ng-model="chefServerSelected"
+
+                            ng-options="s.displayValue for s in chefServers" ng-change="chefServerChange()"></select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="chefServer" class="{{labelClass}} control-label">Search</label>
+
+                <div class="{{inputClass}}">
+                    <input ng-model="searchText">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="rolesButtons" style="float: right; margin-right: 80px; margin-top: 40px;">
+        
+        <button class="btn btn-success"
+        	ng-click="go('/roles/new')"
+                >
+            &nbsp; New &nbsp;
+        </button>
+    
+    </div>
+-->
+    
+    <br/><br/>
+
+  
+	
+	<div style="float: left; width: 1280px;">
+		
+		<h3 >Roles</h3>
+	</div>
+	<br /><br />
+	
+
+ <table class="table">
+        <tr>
+            <th>Name</th>
+            <th><center>Node Count</center></th>
+            <th><center>Actions</center></th>
+        </tr>
+        <tbody ng-repeat="role in roles|filter:searchText|orderBy:predicate:reverse">
+        <tr>
+            <td width="65%"><a ng-click="showEnvEdit = ! showEnvEdit"><b>{{role.name}}</b></a></td>
+            <td width="15%"><center>{{role.nodeCount}}</center></td>
+            <td nowrap class="roles-actions-cell"><center>
+                
+                <button class="btn btn-success"
+                        ng-disabled="!authedUser.adminOn && !role.authorized"
+                        tooltip-placement="bottom"
+                        tooltip="Manage this role"
+                        ng-click="go('/roles/'+role.name)"
+                        >
+                    &nbsp; Manage &nbsp;
+                </button>
+            
+                <button class="btn btn-success"
+                        ng-disabled="!authedUser.adminOn && !role.authorized"
+                        tooltip-placement="bottom"
+                        tooltip="Delete this role"
+                        ng-click="deleteRole(role.name)">Delete
+                </button>
+            </center></td>
+        </tr>
+        
+        </tbody>
+    </table>
+    <center><img id="loading-spinner" src="../images/spinner-clock-blue.gif"/></center>
+
+
+<hr />
+
+</div>
+
+<footer></footer>
+
+
+

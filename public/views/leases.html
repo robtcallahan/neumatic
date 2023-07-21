@@ -1,0 +1,42 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <h2 style="margin: 20px 0;">Admin: Lab Systems Leases</h2>
+
+    <table-pager input="leases" output="pagedData" predicate="predicate" reverse="reverse"></table-pager>
+
+    <table class="table">
+        <tr>
+            <th>&nbsp;</th>
+            <th><a href="" ng-click="predicate = 'serverName'; reverse = !reverse;">Server Name</a></th>
+            <th><a href="" ng-click="predicate = 'owner'; reverse = !reverse;">Owner</a></th>
+            <th><a href="" ng-click="predicate = 'leaseStart'; reverse = !reverse;">Lease Start</a></th>
+            <th><a href="" ng-click="predicate = 'leaseEnd'; reverse = !reverse;">Lease End</a></th>
+            <th><a href="" ng-click="predicate = 'daysToLeaseEnd'; reverse = !reverse;">Days Remaining</a></th>
+            <th><a href="" ng-click="predicate = 'leaseDuration'; reverse = !reverse;">Duration</a></th>
+            <th><a href="" ng-click="predicate = 'expired'; reverse = !reverse;">Expired</a></th>
+            <th><a href="" ng-click="predicate = 'extensionInDays'; reverse = !reverse;">Extension</a></th>
+            <th><a href="" ng-click="predicate = 'numExtensionsAllowed'; reverse = !reverse;">Extensions Allowed</a></th>
+            <th><a href="" ng-click="predicate = 'numTimesExtended'; reverse = !reverse;">Num Extensions</a></th>
+        </tr>
+        <tr ng-repeat="lease in pagedData">
+            <td>{{$index + 1}}</td>
+            <td><!--suppress HtmlUnknownAnchorTarget -->
+                <a href="/#/leases/{{lease.serverId}}">{{lease.serverName}}</a></td>
+            <td>{{lease.owner}}</td>
+            <td>{{lease.leaseStart}}</td>
+            <td>{{lease.leaseEnd}}</td>
+            <td>{{lease.daysToLeaseEnd}}</td>
+            <td>{{lease.leaseDuration}}</td>
+            <td>{{lease.expired}}</td>
+            <td>{{lease.extensionInDays}}</td>
+            <td>{{lease.numExtensionsAllowed}}</td>
+            <td>{{lease.numTimesExtended}}</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

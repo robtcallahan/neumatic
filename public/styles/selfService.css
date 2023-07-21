@@ -1,0 +1,197 @@
+/* BASIC STYLINGS
+============================================================================= */
+body {
+    padding-top: 20px;
+}
+
+pre {
+    margin-bottom: 20px;
+}
+
+.server-buttons {
+    margin-left: 20%;
+}
+.server-buttons-with-admin {
+    margin-left: 10%;
+}
+.server-btn {
+    width: 120px;
+    height: 220px;
+    border: 4px groove #666666;
+    margin-right: 40px;
+    /*padding-bottom: 40px;*/
+    border-radius: 10px;
+    box-shadow: 10px 10px 5px #888888;
+    /*background-size: 52px 74px;*/
+    background-color: #999;
+    background-repeat: no-repeat;
+}
+/*
+button:hover  {
+    border: 4px ridge #666666;
+    box-shadow: 5px 5px 5px #888888;
+    background-color: #296496;
+}
+*/
+.server-btn-pressed {
+    border: 4px ridge #666666;
+    box-shadow: 5px 5px 5px #888888;
+    background-color: #296496;
+}
+
+.server-small {
+    background-position: 30px 62px;
+    background-image: url('../images/coffee_small.png');
+}
+.server-medium {
+    background-position: 30px 48px;
+    background-image: url('../images/coffee_medium.png');
+}
+.server-large {
+    background-position: 30px 32px;
+    background-image: url('../images/coffee_large.png');
+}
+.server-custom {
+    background-position: 30px 32px;
+    background-image: url('../images/coffee_large_admin.png');
+}
+.server-size-name {
+    margin-top: 5px;
+}
+.server-size-info {
+    margin-top: 120px;
+    margin-left: 5px;
+    text-align: left;
+}
+.btn-selfService {
+    border-radius: 10px;
+    font-size: 18px !important;
+    font-weight: normal;
+    padding: 20px 15px !important;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.btn-info {
+    background-color: #296496 !important;
+}
+
+.form-group {
+    padding-top: 30px;
+}
+/* form styling */
+#form-container {
+    background: transparent;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+#form-container .page-header {
+    background: #151515;
+    margin: 0;
+    padding: 30px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* numbered buttons */
+#status-buttons {
+}
+
+#status-buttons a {
+    color: #999;
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+#status-buttons a:hover {
+    text-decoration: none;
+}
+
+#status-buttons span {
+    background: #080808;
+    display: block;
+    height: 30px;
+    margin: 0 auto 10px;
+    padding-top: 5px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+/* active buttons */
+#status-buttons a.active span {
+    background: #296496;
+}
+
+/* ANIMATION STYLINGS
+============================================================================= */
+#selfService-form {
+    position: relative;
+    min-height: 480px;
+    overflow: hidden;
+    padding: 30px;
+    background: transparent !important;
+}
+#selfService-views {
+    width:auto;
+}
+
+/* basic styling for entering and leaving */
+/* left and right added to ensure full width */
+#selfService-views.ng-enter,
+#selfService-views.ng-leave {
+    position: absolute;
+    left: 30px;
+    right: 30px;
+}
+
+/* enter animation */
+#selfService-views.ng-enter {
+    -webkit-animation: slideInRight 0.5s both ease-in;
+    -moz-animation: slideInRight 0.5s both ease-in;
+    animation: slideInRight 0.5s both ease-in;
+    z-index: 8888;
+}
+
+/* leave animation */
+#selfService-views.ng-leave {
+    -webkit-animation: slideOutLeft 0.5s both ease-in;
+    -moz-animation: slideOutLeft 0.5s both ease-in;
+    animation: slideOutLeft 0.5s both ease-in;
+    z-index: 9999;
+}
+
+/* ANIMATIONS
+============================================================================= */
+/* slide out to the left */
+@keyframes slideOutLeft {
+    to { transform: translateX(-200%); }
+}
+
+@-moz-keyframes slideOutLeft {
+    to { -moz-transform: translateX(-200%); }
+}
+
+@-webkit-keyframes slideOutLeft {
+    to { -webkit-transform: translateX(-200%); }
+}
+
+/* slide in from the right */
+@keyframes slideInRight {
+    from { transform: translateX(200%); }
+    to   { transform: translateX(0); }
+}
+
+@-moz-keyframes slideInRight {
+    from { -moz-transform: translateX(200%); }
+    to   { -moz-transform: translateX(0); }
+}
+
+@-webkit-keyframes slideInRight {
+    from { -webkit-transform: translateX(200%); }
+    to   { -webkit-transform: translateX(0); }
+}

@@ -1,0 +1,56 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+
+
+<!-- Content -->
+<div class="container environments-table pad-top" style="width: 1024px;">
+
+	
+	<div id="environmentsButtons" style="float: right; margin-right: 80px; margin-top: 20px;">
+		
+		<button class="btn btn-success"
+		tooltip-placement="bottom"
+		tooltip="Return to previous page"
+		ng-click="back()">
+			Back
+		</button>
+		
+	</div>
+	<br /><br /><br />
+	<div style="float: left; width: 1280px;">
+		
+		<h3 >Add from Git Tags for project: {{project.name}}</h3>
+	</div>
+	<br /><br />
+	
+	<table class="table">
+		<tr>
+			<th>Name</th>
+			<th>Message</th>
+			<th>Author</th>
+			<th>Date</th>
+			<th>Action</th>
+		</tr>
+		<tbody ng-repeat="tag in tags|filter:searchText|orderBy:predicate:reverse">
+			<tr>
+				<td><b>{{tag.name}}</b></td>
+				<td>{{tag.commit.message}}</td>
+				<td>{{tag.commit.author.email}}</td>
+				<td>{{tag.commit.authored_date}}</td>
+				<td nowrap class="actions-cell">
+				<button class="btn btn-success" ng-click="importGitTag(tag.name)">
+					&nbsp; Add &nbsp;
+				</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<center><img  id="loading-spinner"  src="../images/spinner-clock-blue.gif"/>
+	</center>
+	<br />
+
+	<hr />
+
+	<footer></footer>
+</div>
+

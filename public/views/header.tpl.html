@@ -1,0 +1,108 @@
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container menu-container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logo" href="/#/">NeuMatic</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="{{nav.servers ? 'active' : ''}} dropdown">
+                    <a href class="dropdown-toggle" isopen="false">Systems</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/#/servers/current/0" tooltip-placement="right" tooltip="List current systems">List Systems</a></li>
+                        <li><a href="/#/selfService" tooltip-placement="right" tooltip="Build a Neu System">Neu System</a></li>
+                    </ul>
+                </li>
+                <li class="{{nav.chef ? 'active' : ''}} dropdown" >
+                    <a href class="dropdown-toggle" isopen="false">Chef</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/#/environments" tooltip-placement="right" tooltip="Manage Chef Environments">Environments</a></li>
+                        <li><a href="/#/roles" tooltip-placement="right" tooltip="Manage Chef Roles">Roles</a></li>
+                        <li><a href="/#/cookbooks" tooltip-placement="right" tooltip="Manage Chef Cookbooks">Cookbooks</a></li>
+                        <li><a href="/#/nodes" tooltip-placement="right" tooltip="Manage Chef Nodes">Nodes</a></li>
+                        <li class="{{nav.util ? 'active' : ''}}" ng-show="authedUser.userType === 'Admin'">
+                            <a href="/#/util/bootstrap" tooltip-placement="right" tooltip="Boostrap a set of hosts">Bootstrap</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="{{nav.admin ? 'active' : ''}} dropdown" ng-show="authedUser.userType === 'Admin'">
+                    <a href class="dropdown-toggle" isopen="false">Admin</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/#/teams" tooltip-placement="right" tooltip="Manage Teams">Teams</a></li>
+                        <li><a href="/#/leases" tooltip-placement="right" tooltip="Manage VM Leases">VM Leases</a></li>
+                        <li><a href="/#/vlans" tooltip-placement="right" tooltip="Manage VLANs">VLANs</a></li>
+                        <li><a href="/#/quotas" tooltip-placement="right" tooltip="Manage VMware Business Service Quotas">VMware Quotas</a></li>
+                        <li><a href="/#/vmware" tooltip-placement="right" tooltip="View VMware infrastructure">VMware Tree</a></li>
+                        <li><a href="/#/deleteNode" tooltip-placement="right" tooltip="Delete Chef node">Delete Chef Node</a></li>
+                    </ul>
+                </li>
+                <li class="{{nav.help ? 'active' : ''}} dropdown">
+                    <a href class="dropdown-toggle" isopen="false">Help</a>
+                    <ul class="dropdown-menu">
+                        <li><a ng-click="jiraService.openBugReport()" tooltip-placement="right" tooltip="Submit a bug report or provide feedback">Bug Report</a></li>
+                        <li><a href="https://confluence.nexgen.neustar.biz/pages/viewpage.action?pageId=39925029"
+                               target="_blank"
+                               tooltip-placement="right"
+                               tooltip="Confluence Page">Confluence Page</a></li>
+                        <li><a href="/#/help" tooltip-placement="right" tooltip="How do I use this thing?">Getting Started</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{nav.reports ? 'active' : ''}} dropdown">
+                    <a href class="dropdown-toggle" isopen="false">Reports</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/#/reports/builds" tooltip-placement="right"
+                               tooltip="Some build metrics">Builds</a></li>
+                        <li><a href="/#/reports/nodes" tooltip-placement="right"
+                               tooltip="Chef nodes information">Nodes</a></li>
+                        <li><a href="/#/reports/users" tooltip-placement="right"
+                               tooltip="Users are...good people">Users</a></li>
+                    </ul>
+                </li>
+
+                <li style="margin-left:50px;">
+                    <a href="/#/users/{{authedUser.id}}"
+                       tooltip-placement="bottom"
+                       tooltip="Does this font make my name look big?">{{authedUser.firstName}}</a>
+                </li>
+                <li>
+                    <a ng-show="authedUser.userType === 'Admin' && !authedUser.adminOn"
+                        tooltip-placement="bottom"
+                        tooltip="Turn on admin privileges"
+                        ng-click="authedUserService.clearCache(); authedUserService.setAdminOn()"
+                        style="color:green;">Admin is Off
+                    </a>
+                </li>
+                <li>
+                    <a ng-show="authedUser.userType === 'Admin' && authedUser.adminOn"
+                        tooltip-placement="bottom"
+                        tooltip="Turn off admin privileges"
+                        ng-click="authedUserService.clearCache(); authedUserService.setAdminOff()"
+                        style="color:red;">Admin is On
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Message of the day -->
+<div class="motd motd-panel" ng-init="isCollapsed=false" collapse="isCollapsed" ng-show="authedUser.showMotd && authedUser.motd.length > 10">
+    <div class="motd motd-heading">Message of the Day</div>
+    <div class="motd motd-content">
+        <p class="motd" ng-bind-html="authedUser.motd"></p>
+        <button class="btn btn-default motd"
+                ng-click="isCollapsed = true; authedUser.showMotd = false">Ok, Now Go Away</button>
+    </div>
+</div>
+
+<!-- Prompt Modal Message -->
+<prompt-modal model="modal"></prompt-modal>
+

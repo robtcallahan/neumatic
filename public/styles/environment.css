@@ -1,0 +1,125 @@
+.environments-table {
+	width: 100%;
+}
+
+.environmentEditBox {
+	border: 1px solid #CCCCCC;
+	margin: 5px;
+	padding: 10px;
+}
+.environmentNodeListBox {
+	border: 1px solid #CCCCCC;
+	margin: 5px;
+	padding: 10px;
+}
+.environmentAttributesBox {
+	border: 1px solid #CCCCCC;
+	margin: 5px;
+	padding: 10px;
+}
+.environmentCookbookVersionsBox {
+	border: 1px solid #CCCCCC;
+	margin: 5px;
+	padding: 10px;
+}
+
+#environmentFormLoading {
+	display: inline-block;
+}
+.environmentButtons {
+	float: right;
+}
+.environments-actions-cell {
+	width: 160px;
+}
+
+.nodeDragBox {
+	list-style-type: none;
+	padding: 0px;
+	margin: 3px;
+}
+.roleDragBox {
+	background: #e8F1Fe;
+	list-style-type: none;
+	padding: 0px;
+	margin: 3px;
+}
+.recipeDragBox {
+	background: #e8fef1;
+	list-style-type: none;
+	padding: 0px;
+	margin: 3px;
+}
+
+.attributeOverlay {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+}
+
+.attributePopup {
+	position: fixed;
+	top: 30%;
+	left: 30%;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	margin-top: -y;
+	margin-left: -x;
+	padding: 20px 20px 20px 20px;
+	width: 600px;
+}
+
+#chefMenuDropdown {
+	padding-top: ;
+	/* border: 1px solid #999; */
+	zIndex: 99;
+	position: absolute;
+	
+	display: none;
+	
+}
+
+#chefMenuDropdown ul{
+	
+	background-color: #101010;
+	color: #999;
+	margin-left: 7px;
+	margin-right: 0px;
+	padding: 0px;
+}
+
+#chefMenuDropdown li{
+	list-style: none;
+	padding: 0; /*removes in Firefox/Mozilla*/ 
+	margin: 0; /*removes in IE & Opera*/
+	border: 1px solid #999;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	
+}
+
+#chefMenuDropdown a {
+	text-decoration: none;
+	color: #999;
+}
+#chefMenuDropdown a:hover {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.environmentFormFieldContainer {
+	width: 700px; 
+	padding-bottom: 60px;
+}
+
+.environmentFormField {
+	width: 500px; 
+	float: right;
+}
+
+.environmentFormFieldLabel {
+	width: 200px; 
+	float: left;
+}

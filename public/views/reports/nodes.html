@@ -1,0 +1,37 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <h2 style="margin: 20px 0;">Reports: Nodes</h2>
+    <table-pager input="nodes" output="pagedData" predicate="predicate" reverse="reverse"></table-pager>
+
+    <table class="table" at-table at-list="nodes">
+        <thead></thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th><a href="" ng-click="predicate = 'name'; reverse = !reverse;">Node Name</a></th>
+            <th><a href="" ng-click="predicate = 'chefEntOrg'; reverse = !reverse;">Chef Org</a></th>
+            <th><a href="" ng-click="predicate = 'roles'; reverse = !reverse;">Chef Roles</a></th>
+            <th><a href="" ng-click="predicate = 'neuCollectionVersion'; reverse = !reverse;">build-neu_collection Ver</a></th>
+            <th><a href="" ng-click="predicate = 'platform'; reverse = !reverse;">Platform</a></th>
+            <th><a href="" ng-click="predicate = 'platformVersion'; reverse = !reverse;">OS Ver</a></th>
+            <th><a href="" ng-click="predicate = 'chefVersion'; reverse = !reverse;">Chef Ver</a></th>
+            <th><a href="" ng-click="predicate = 'ohaiTimeDiff'; reverse = !reverse;">Last Check-In</a></th>
+        </tr>
+        <tr ng-repeat="node in pagedData track by $index">
+            <td>{{$index + 1}}</td>
+            <td>{{node.name}}</td>
+            <td>{{node.chefEntOrg}}</td>
+            <td>{{node.roles}}</td>
+            <td>{{node.neuCollectionVersion}}</td>
+            <td>{{node.platform}}</td>
+            <td>{{node.platformVersion}}</td>
+            <td>{{node.chefVersion}}</td>
+            <td>{{node.ohaiTimeDiffString}}</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

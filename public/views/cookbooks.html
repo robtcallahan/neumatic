@@ -1,0 +1,93 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container environments-table pad-top" style="width:1024px;">
+	<div style="width: 950px; margin-bottom: 60px;">
+	    <div style="width:400px; float: left; ">
+	    	<div style="align: left;">
+	            <label for="chefServer" style="word-wrap: break-word; float: left;">Chef Server</label><select style="float: right; width: 300px;" class="form-control" id="chefServer" ng-model="chefServerSelected" ng-options="s.displayValue for s in chefServers" ng-change="chefServerChange()"></select>
+	        </div>
+	   		<div style="align: left; margin-top: 50px; ">
+	            <label for="chefServer" style="margin-right: 53px;">Search</label><input ng-model="searchText">
+	        </div>
+	    </div>
+	    <div style="float: right; ">
+	        <button class="btn btn-success"
+	        	ng-click="go('/addCookbook')">
+	            &nbsp; New &nbsp;
+	        </button>
+	    </div>
+	</div>
+	
+<!--
+	<div class="row" style="float:left; width: 500px; margin-bottom: 20px;">
+		<div class="{{rowClass}}" style="width: 100%">
+			<div class="form-group">
+				<label for="chefServer" class="{{labelClass}} control-label">Chef Server</label>
+
+				<div class="{{inputClass}}">
+					<select class="form-control" id="chefServer" ng-model="chefServerSelected"
+					
+					ng-options="s.displayValue for s in chefServers" ng-change="chefServerChange()"></select>
+				</div>
+			</div>
+			<br />
+			<br />
+			<div class="form-group">
+				<label for="chefServer" class="{{labelClass}} control-label">Search</label>
+
+				<div class="{{inputClass}}">
+					<input ng-model="searchText">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="environmentsButtons" style="float: right; margin-right: 80px; margin-top: 20px;">
+		<a href="/#/addCookbook">
+		<button class="btn btn-success">
+			&nbsp; Add &nbsp;
+		</button></a>
+	</div>
+	<br /><br /><br />
+
+-->
+
+	<div style="float: left; width: 1280px;">
+		
+		<h3 >Installed Cookbooks</h3>
+	</div>
+	<br /><br />
+	<table class="table">
+		<tr>
+			<th><a href="" ng-click="predicate = 'name'; reverse = !reverse;">Name</a></th>
+			<th>Latest Version</th>
+			
+			<th>Action</th>
+		</tr>
+		<tbody ng-repeat="cookbook in cookbooks|filter:searchText|orderBy:predicate:reverse ">
+			<tr>
+				<td><b>{{cookbook.name}}</b></td>
+				<td>{{cookbook.versions.0}}</td>
+				
+				<td nowrap class="actions-cell">
+				
+				
+				<button class="btn btn-success"
+				ng-disabled="!authedUser.adminOn && cookbook.authorized != true"
+				ng-click="go('/cookbooks/'+cookbook.name)">
+					&nbsp; Manage &nbsp;
+				</button></td>
+			</tr>
+		</tbody>
+	</table>
+
+<center><img  id="loading-spinner"  src="../images/spinner-clock-blue.gif"/></center>
+<hr />
+<footer></footer>
+</div>
+
+
+
+
+

@@ -1,0 +1,100 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<script type="text/ng-template" id="typeaheadTemplate.html">
+  <a>
+      <span ng-bind-html="match.label"></span>
+  </a>
+</script>
+
+<!-- Content -->
+<div class="container pad-top">
+    <div class="col-lg-12">
+
+        <div class="col-lg-9">
+
+            <div class="col-lg-12">
+                <h2 style="margin: 20px 0;">Admin: VMware Quotas for Business Services</h2>
+            </div>
+
+            <div class="col-lg-12" style="margin-bottom: 10px;">
+                <label for="dataCenter" class="col-lg-2 control-label">Data Center</label>
+                <select class="col-lg-2"
+                        id="dataCenter"
+                        ng-model="dataCenter"
+                        ng-change="getClusters()"
+                        ng-options="dataCenter as dataCenter.name for dataCenter in dataCenters">
+                </select>
+                <span class="col-lg-8"></span>
+            </div>
+
+            <div class="col-lg-12" style="margin-bottom: 20px;">
+                <label for="clusters" class="col-lg-2 control-label">Clusters</label>
+                <select class="col-lg-2"
+                        id="clusters"
+                        ng-model="cluster"
+                        ng-change="getBusinessServices()"
+                        ng-options="cluster as cluster.name for cluster in clusters">
+                </select>
+                <span class="col-lg-8"></span>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="col-lg-12 quote-of-the-day" ng-show="showQuote">
+                <div class="quote-title">Quote of the Day</div>
+                <div class="quote">{{quote}}</div>
+                <div class="quote-author">-- {{author}}</div>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table" ng-hide="showQuote">
+        <tr>
+            <th>Business Service</th>
+            <th style="text-align: right;">CPUs Used</th>
+            <th style="text-align: right; width:120px;">CPUs Quota</th>
+            <th style="text-align: right;">Memory Used</th>
+            <th style="text-align: right; width:120px;">Memory Quota</th>
+            <th style="text-align: right;">Storage Used</th>
+            <th style="text-align: right; width:120px;">Storage Quota</th>
+            <th width="200"></th>
+        </tr>
+        <tr ng-repeat="bs in businessServices">
+            <td>{{bs.name}}</td>
+
+            <td style="text-align: right;">{{bs.cpusUsed}}</td>
+            <td align="right">
+                <editable-grid-input align="'right'"
+                                     model="bs.cpusQuota"
+                                     default-value="0"
+                                     save="save(bs, $index, 'cpus')">
+                </editable-grid-input>
+            </td>
+
+            <td style="text-align: right;">{{bs.memoryUsed}}</td>
+            <td align="right">
+                <editable-grid-input align="'right'"
+                                     model="bs.memoryQuota"
+                                     default-value="0"
+                                     save="save(bs, $index, 'cpus')">
+                </editable-grid-input>
+            </td>
+
+            <td style="text-align: right;">{{bs.storageUsed}}</td>
+            <td align="right">
+                <editable-grid-input align="'right'"
+                                     model="bs.storageQuota"
+                                     default-value="0"
+                                     save="save(bs, $index, 'cpus')">
+                </editable-grid-input>
+            </td>
+
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>

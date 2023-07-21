@@ -1,0 +1,31 @@
+<VirtualHost *:80>
+    #ServerName neumatic.dev.tools.ops.neustar.biz
+    #ServerName neumatic.qa.tools.ops.neustar.biz
+    ServerName neumatic.ops.neustar.biz
+    DocumentRoot /var/www/html/neumatic/public
+    Include /etc/httpd/conf.d/sts.env
+    LogLevel notice
+    <Directory /var/www/html/neumatic>
+        DirectoryIndex index.php
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    Include /etc/httpd/conf.d/ssl.env
+    Include /etc/httpd/conf.d/sts.env
+    #ServerName neumatic.dev.tools.ops.neustar.biz
+    #ServerName neumatic.qa.tools.ops.neustar.biz
+    ServerName neumatic.ops.neustar.biz
+    DocumentRoot /var/www/html/neumatic/public
+    LogLevel notice
+    <Directory /var/www/html/neumatic>
+        DirectoryIndex index.php
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>

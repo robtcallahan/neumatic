@@ -1,0 +1,46 @@
+<div id="selfService-page">
+    <!-- Header -->
+    <div ng-include="'views/header.tpl.html'"></div>
+
+    <script type="text/ng-template" id="typeaheadTemplate.html">
+        <a>
+            <span ng-bind-html="match.label"></span>
+        </a>
+    </script>
+
+    <!-- Content -->
+    <div class="container pad-top">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+
+                <div id="form-container">
+                    <div class="page-header text-center">
+                        <h2 style="color:#999;">Self Service Provisioning</h2>
+
+                        <!-- the links to our nested states using relative paths -->
+                        <!-- add the active class if the state matches our ui-sref -->
+                        <div id="status-buttons" class="text-center">
+                            <a ui-sref-active="active" ui-sref=".cmdbInfo"><span>1</span>Service</a>
+                            <a ui-sref-active="active" ui-sref=".serverGroups"><span>2</span>LDAP</a>
+                            <a ui-sref-active="active" ui-sref=".serverSize"><span>3</span>Size</a>
+                            <a ui-sref-active="active" ui-sref=".chefInfo"><span>4</span>Config</a>
+                            <a ng-class="buildIndicator" ui-sref-active="false"><span>5</span>Build</a>
+                        </div>
+                    </div>
+
+                    <!-- use ng-submit to catch the form submission and use our Angular function -->
+                    <form id="selfService-form">
+                        <!-- our nested state views will be injected here -->
+                        <div id="selfService-views" ui-view></div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<hr>
+<footer></footer>

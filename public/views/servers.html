@@ -1,0 +1,248 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Drop down template for autocomplete fields -->
+<script type="text/ng-template" id="typeaheadTemplate.html">
+    <a><span ng-bind-html="match.label"></span></a>
+</script>
+<!-- LDAP User Group Modal -->
+<user-group-assign-dialog username="authedUser.username" server="server"></user-group-assign-dialog>
+<!-- Server Owner Modal -->
+<owner-assign-dialog server="server"></owner-assign-dialog>
+
+
+
+<div class="server-log-div" ng-show="showLog">
+    <img id="log-loading-spinner" class="log-loading-spinner" ng-show="logLoading"
+         src="../images/spinner-clock-blue.gif"/>
+
+    <div class="server-log-dismiss" ng-click="dismissLogWindow()"></div>
+    <div id="div-server-log" class="server-log-file" bind-html-unsafe="serverLog"></div>
+</div>
+
+<!-- Content -->
+<div class="container full-width pad-top">
+    <!--
+    <div style="float: right; width: 300px;">
+        <div ng-show="showQuote">
+            <div class="quote-title">Quote of the Day</div>
+            <div class="quote">{{quote}}</div>
+            <div class="quote-author">-- {{author}}</div>
+        </div>
+    </div>
+    -->
+
+    <img id="loading-spinner" class="loading-spinner" src="../images/spinner-clock-blue.gif"/>
+
+    <h2 style="margin: 20px 0;">Systems: {{ldapUserGroup}} - {{listType.name}}</h2>
+
+    <div style="float:left; width: 240px; height: 70px; overflow-y: scroll; margin: 10px; border: 1px solid #999; border-radius: 4px;">
+        <div class="teamStyle"
+             ng-class="{teamStyleOver: hover1, teamStyleSelected: 'My Systems' == selectedLdapUserGroup}"
+             ng-mouseenter="hover1 = true"
+             ng-mouseleave="hover1 = false"
+             ng-click="selectLdapUserGroup(myGroup, 'first');">
+            My Systems
+        </div>
+        <div ng-repeat="group in authedUser.ldapUserGroups"
+             class="teamStyle"
+             ng-class="{teamStyleOver: hover, teamStyleSelected: group == selectedLdapUserGroup}"
+             ng-mouseenter="hover = true"
+             ng-mouseleave="hover = false"
+             ng-click="selectLdapUserGroup(group, $index);">
+            {{group}}
+        </div>
+    </div>
+
+    <div style="float:left; width: 240px; height: 70px; overflow-y: scroll; margin: 10px; border: 1px solid #999; border-radius: 4px;">
+        <div ng-repeat="type in listTypes"
+             class="teamStyle"
+             ng-class="{teamStyleOver: hover, teamStyleSelected: $index == selectedListType}"
+             ng-mouseenter="hover = true"
+             ng-mouseleave="hover = false"
+             ng-click="selectListType(type, $index)">
+            {{type.name}}
+        </div>
+    </div>
+
+    <table-pager style="float: left;"
+                 input="servers"
+                 output="pagedData"
+                 predicate="predicate"
+                 reverse="reverse"></table-pager>
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <th align="left"><a href="" ng-click="changeSort('hostname')">Name</a></th>
+            <th width="40">&nbsp;</th>
+            <th align="left"><a href="" ng-click="changeSort('serverTypeDisplayed')">Type</a></th>
+            <th align="left">Description</th>
+            <th align="left"><a href="" ng-click="changeSort('daysToLeaseEnd')">Lease End</a></th>
+            <th align="left"><a href="" ng-click="changeSort('chefServerHostName')">Chef Server</a></th>
+            <th align="left"><a href="" ng-click="changeSort('chefVersion')">Version</a></th>
+            <th align="left"><a href="" ng-click="changeSort('ohaiTime')">Last Check-In</a></th>
+            <th align="left"><a href="" ng-click="changeSort('chefRole')">Role</a></th>
+            <th align="left"><a href="" ng-click="changeSort('chefEnv')">Environment</a></th>
+            <th align="left"><a href="" ng-click="changeSort('owner')">Owner</a></th>
+            <th align="left"><a href="" ng-click="changeSort('ldapUserGroup')">User Group</a></th>
+            <th align="left"><a href="" ng-click="changeSort('statusText')">Status</a></th>
+
+            <!--
+            <th><a href="" ng-click="changeSort('chefStatusText')">Cook Time</a></th>
+            <th><a href="" ng-click="changeSort('dateBuilt')">Built</a></th>
+            -->
+        </tr>
+        <tr ng-repeat-start="server in pagedData">
+            <td>{{$index + 1}}</td>
+            <td>{{server.hostname}}</td>
+            <td class="dropdown">
+                <a href="" class="dropdown-toggle actions-menu">
+                    <span class="actions-menu">&nbsp;</span>
+                </a>
+                <ul id="serverActionsMenu" class="dropdown-menu popup-menu">
+                    <li style="color: #999999; margin-left: 5px; text-decoration: underline;">Server Views</li>
+                    <li><a href=""
+                           ng-click="navTo(server, $index, '/#/server/', 'id')"
+                           tooltip-placement="right"
+                           tooltip="Go to server config page">Server Details</a>
+                    </li>
+                    <li><a href=""
+                           ng-click="setChefServer(server); navTo(server, $index, '/#/nodes/', 'name')"
+                           tooltip-placement="right"
+                           tooltip="Go to the Chef node page">Chef Node Details</a>
+                    </li>
+                    <li><a href=""
+                           ng-click="navTo(server, $index, '/#/audit/', 'id')"
+                           tooltip-placement="right"
+                           tooltip="Go to the audit history page">Audit History</a>
+                    </li>
+                    <li ng-show="authedUser.userType === 'Admin' && server.poolServer">
+                        <a href=""
+                           ng-click="navTo(server, $index, '/#/leases/', 'id')"
+                           tooltip-placement="right"
+                           tooltip="Go to the server lease page">Lease Details</a>
+                    </li>
+
+                    <li style="color: #999999; margin-left: 5px; text-decoration: underline;">Server Actions</li>
+                    <li><a href=""
+                           ng-show="server.status !== 'Building' && !server.archived ? true : false"
+                           tooltip-placement="right"
+                           tooltip="Build this server with its current config"
+                           ng-click="buttonBuildServer(server, $index)">Build
+                        </a>
+                    </li>
+                    <!--
+                    <li><a href=""
+                           ng-show="server.status !== 'Building' && !server.archived && server.serverType === 'remote'"
+                           tooltip-placement="right"
+                           tooltip="Build server skipping LDAP, CMDB, etc"
+                           ng-click="quickBuild(server, $index)">Quick Build
+                        </a>
+                    </li>
+                    -->
+                    <li><a href=""
+                           tooltip-placement="right"
+                           tooltip="Assign this server to a different user"
+                           ng-click="assignOwner(server, $index)">Assign Owner
+                        </a>
+                    </li>
+                    <li><a href=""
+                           tooltip-placement="right"
+                           tooltip="Assign this server to a different LDAP user group"
+                           ng-click="assignLdapUserGroup(server, $index)">Assign User Group
+                        </a>
+                    </li>
+                    <!--
+                    <li><a href=""
+                           ng-show="server.status !== 'Building' && !server.archived ? true : false"
+                           tooltip-placement="right"
+                           tooltip="Rebuild this server with its current config. No changes to DNS, LDAP or CMDB."
+                           ng-click="buttonRebuildServer(server)">Rebuild
+                    </a>
+                    </li>
+                    -->
+                    <li><a href=""
+                           ng-show="server.status !== 'Building' && !server.archived && !server.labHost ? true : false"
+                           tooltip-placement="right"
+                           tooltip="Move this server to the archived list"
+                           ng-click="buttonArchiveServer(server, $index)">Archive
+                    </a>
+                    </li>
+                    <li>
+                        <a href=""
+                           ng-show="server.status !== 'Building' && server.archived && !server.labHost ? true : false"
+                           tooltip-placement="right"
+                           tooltip="Move this server to the current list"
+                           ng-click="buttonUnarchiveServer(server, $index)">Unarchive
+                        </a>
+                    </li>
+                    <li>
+                        <a href=""
+                           ng-show="server.status === 'Building' ? true : false"
+                           tooltip-placement="right"
+                           tooltip="Stop the build from proceeding"
+                           style="color: red;"
+                           ng-click="buttonStopServer(server, $index)">Stop
+                        </a>
+                    </li>
+                    <li>
+                        <a href=""
+                           ng-show="server.status === 'Building' ? false : true"
+                           tooltip-placement="right"
+                           tooltip="Delete this server"
+                           style="color: red;"
+                           ng-click="buttonDeleteServer(server, $index)">Delete
+                        </a>
+                    </li>
+                </ul>
+                <img src="../images/ajax-loader-small.gif" style="height: 20px; width: 20px; margin-left: 30px; "
+                     ng-show="server.status === 'Building' || server.status === 'Deleting' ? true : false">
+            </td>
+            <td>{{server.serverTypeDisplayed}}</td>
+            <td><editable-grid-input model="server.description" save="saveDescription(server)"></editable-grid-input></td>
+            <td ng-show="server.isLeased" class="{{server.leaseAlertClass}}">{{server.daysToLeaseEnd}} days</td>
+            <td ng-show="!server.isLeased">-</td>
+            <td>{{server.chefServerHostName}}</td>
+            <td ng-class="server.chefVersionStatus">{{server.chefVersion}}</td>
+            <td ng-class="server.ohaiTimeStatus">{{server.ohaiTimeDiffString}}</td>
+            <td>{{server.chefRole}}</td>
+            <td>{{server.chefEnv}}</td>
+            <td>{{server.owner}}</td>
+            <td>{{server.ldapUserGroup}}</td>
+            <td class="status-cell" nowrap>
+                <span ng-show="server.statusText === 'Chef run failed'">
+                    <a href="" ng-click="showServerLog(server)" style="text-decoration: underline; color: red;">{{server.statusText}}</a>
+                </span>
+                <span ng-hide="server.status === 'Building' || server.statusText === 'Chef run failed'" ng-class="statusColor(server.status)">
+                    {{server.statusText}}
+                </span>
+                <span ng-show="server.serverType !== 'remote' && server.status === 'Building' && server.statusText !== 'Chef run failed'" ng-class="statusColor(server.status)">
+                    [{{server.elapsedTime}}] {{server.statusText}}
+                </span>
+                <span ng-show="server.serverType === 'remote' && server.status === 'Building' && server.statusText !== 'Chef run failed'" ng-class="statusColor(server.status)">
+                    {{server.status}}
+                </span>
+            </td>
+        </tr>
+        <tr ng-repeat-end ng-show="server.serverType === 'remote' && server.status === 'Building'">
+            <td colspan="1">&nbsp;</td>
+            <td colspan="1">Elapsed Time:</td>
+            <td colspan="1">{{server.elapsedTime}}</td>
+            <td colspan="1">Status:</td>
+            <td colspan="5">{{server.statusText}}</td>
+            <td colspan="1">Progress:</td>
+            <td colspan="3">
+                <progressbar max="server.buildSteps" value="server.buildStep">
+                    <span style="color:black; white-space:nowrap;">{{server.buildStep}} / {{server.buildSteps}}</span>
+                </progressbar>
+            </td>
+            <td colspan="1">&nbsp;</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+<footer></footer>
+
+

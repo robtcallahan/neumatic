@@ -1,0 +1,32 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+<div class="container full-width pad-top" >
+    <h2>{{title}}</h2>
+    <img id="loading-spinner" class="loading-spinner" src="../images/spinner-clock-blue.gif"/>
+    <br>
+    <br>
+    <table class="table">
+        <tr>
+            <th><a href="" ng-click="predicate = 'dateTime'; reverse = !reverse;">Date</a></th>
+            <th><a href="" ng-click="predicate = 'userName'; reverse = !reverse;"></a>User</th>
+            <th><a href="" ng-click="predicate = 'uri'; reverse = !reverse;">URI</a></th>
+            <th><a href="" ng-click="predicate = 'function'; reverse = !reverse;">Function</a></th>
+            <th><a href="" ng-click="predicate = 'parameters'; reverse = !reverse;">Parameters</a></th>
+            <th><a href="" ng-click="predicate = 'descr'; reverse = !reverse;">Description</a></th>
+        </tr>
+        <tr ng-repeat="entry in logEntries|orderBy:predicate:reverse">
+            <td>{{entry.dateTime}}</td>
+            <td>{{entry.userName}}</td>
+            <td>{{entry.uri}}</td>
+            <td>{{entry.function}}</td>
+            <td>{{entry.parameters}}</td>
+            <td>{{entry.descr}}</td>
+        </tr>
+    </table>
+</div>
+<hr>
+<footer></footer>
+
+

@@ -1,0 +1,45 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+<!-- Content -->
+
+
+<div class="container pad-top">
+    <!--
+    <ul class="nav nav-pills">
+        <li ng-repeat="c in consoleService.getConsoles()">
+            <a href="/#/console/{{c.getServer().id}}" data-toggle="pill">{{c.getServer().name}}</a>
+        </li>
+    </ul>
+    -->
+
+    <div style="width: 45%;float:left;margin-right:70px;">
+        <div class="panel panel-primary panel-console">
+            <div class="panel-heading">
+                <h3 class="panel-title">Console: {{server.name}}</h3>
+            </div>
+            <div class="panel-body console-body" id="consoleData" ng-model="consoleData">
+                <div class="console-term" ng-bind-html="consoleData"></div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 45%;float:left;margin-left:20px;">
+        <div class="panel panel-primary panel-console">
+            <div class="panel-heading">
+                <h3 class="panel-title">Console Watcher: {{server.name}}</h3>
+            </div>
+            <div class="panel-body console-body" id="consoleWatcher" ng-model="consoleWatcher">
+                <pre class="console-term" ng-bind-html="consoleWatcher"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+
+
+-->
+
+
+<hr>
+<footer></footer>

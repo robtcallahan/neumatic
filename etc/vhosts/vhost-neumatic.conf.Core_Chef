@@ -1,0 +1,34 @@
+<VirtualHost *:80>
+    # ServerName cmt.dev.tools.ops.neustar.biz
+    # ServerName cmt.qa.tools.ops.neustar.biz
+    # ServerName cmt.ops.neustar.biz
+    ServerName cmt.stlabvsts01.va.neustar.com
+    DocumentRoot /var/www/html/CMT/public
+    Include /etc/httpd/conf.d/sts.env
+    LogLevel notice
+    <Directory /var/www/html/CMT>
+        DirectoryIndex index.php
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    Include /etc/httpd/conf.d/ssl.env
+    Include /etc/httpd/conf.d/sts.env
+    # ServerName cmt.dev.tools.ops.neustar.biz
+    # ServerName cmt.qa.tools.ops.neustar.biz
+    # ServerName cmt.ops.neustar.biz
+    ServerName cmt.stlabvsts01.va.neustar.com
+    DocumentRoot /var/www/html/CMT/public
+    LogLevel notice
+    <Directory /var/www/html/CMT>
+        DirectoryIndex index.php
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+

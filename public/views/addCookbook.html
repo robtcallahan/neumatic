@@ -1,0 +1,69 @@
+<!-- Header -->
+<div ng-include="'views/header.tpl.html'"></div>
+
+
+
+
+<!-- Content -->
+<div class="container environments-table pad-top content_container"  style="width: 1024px;">
+	<div class="row" style="float:left; width: 500px; margin-bottom: 20px;">
+		<div class="{{rowClass}}" style="width: 100%">
+			
+			<br />
+			<div class="form-group">
+				<label for="searchText" class="{{labelClass}} control-label">Search</label>
+
+				<div class="{{inputClass}}">
+					<input ng-model="searchText">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="environmentsButtons" style="float: right; margin-right: 80px; margin-top: 55px;">
+		
+		<button class="btn btn-success"
+		tooltip-placement="bottom"
+		tooltip="Return to previous page"
+		ng-click="back()">
+			Back
+		</button>
+		
+	</div>
+	<br /><br /><br />
+	<div style="float: left; width: 1280px;">
+		
+		<h3 >Add Cookbook</h3>
+	</div>
+	<br /><br />
+	
+	<table class="table">
+		<tr>
+			<th><a href="" ng-click="predicate = 'name'; reverse = !reverse;">Name</a></th>
+			<th><a href="" ng-click="predicate = 'namespace.name'; reverse = !reverse;">Group</a></th>
+			<!-- <th>Author</th> -->
+			<th>Action</th>
+		</tr>
+		<tbody ng-repeat="project in projects|filter:searchText|orderBy:predicate:reverse">
+			<tr>
+				<td><b>{{project.name}}</b></td>
+				<td>{{project.namespace.name}}</td>
+				<!-- <td>{{project.tags[0].commit.author.email}}</td> -->
+				<td nowrap class="actions-cell">
+				
+				
+				<button class="btn btn-success"
+					ng-click="go('/addCookbook/'+project.namespace.name+'/'+project.id)">
+					&nbsp; Add &nbsp;
+				</button></td>
+			</tr>
+		</tbody>
+	</table><br />
+	
+<center><img  id="loading-spinner"  src="../images/spinner-clock-blue.gif"/></center>
+<hr />
+
+</div>
+
+<footer></footer>
+
+

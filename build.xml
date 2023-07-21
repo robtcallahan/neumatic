@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="NeuMatic" default="build">
+
+    <!-- Define the application name so we can use it everywhere else -->
+    <resolvepath propertyName="repoDir" file="." />
+
+    <!-- Define the application name so we can use it everywhere else -->
+    <property name="summary" value="The change in Neustar as automation goes from 2.0 to 3.0." />
+    <property name="appName" value="neumatic" />
+    <property name="release" value="3" />
+    <property name="version" value="2.8" />
+    <property name="releaseName" value="December 18, 2015" />
+    <property name="tagName" value="v${version}.${release}" />
+
+    <!-- Define Git properties -->
+    <property name="tag" value="false" />
+    <property name="git" value="false" />
+    <property name="gitpath" value="/usr/bin/git" />
+    <!-- <property name="gitrepo" value="ssh://git@git.nexgen.neustar.biz:8022/automationtools/neumatic.git" /> -->
+    <property name="reportDir" value="/var/www/html/report" />
+    <property name="buildDir" value="pkg/rpmbuild/BUILD" />
+
+    <!-- Yum repo properties -->
+    <property name="yumServer" value="repo.va.neustar.com" />
+    <property name="yumRepo" value="autotools/applications" />
+    <property name="yumPublishExec" value="/opt/automation/bin/publish_rpm" />
+
+    <echo msg="Defining package fileset"/>
+    <fileset id="packageFiles" dir=".">
+        <include name="README" />
+        <include name="index.php" />
+        <include name="init_autoloader.php" />
+
+        <include name="bin/" />
+        <include name="config/" />
+        <include name="etc/" />
+        <include name="module/" />
+        <include name="public/" />
+        <include name="sql/" />
+        <include name="templates/" />
+        <include name="var/" />
+        <include name="vendor/" />
+    </fileset>
+
+    <!-- TARGET: clean -->
+    <target name="clean">
+        <echo msg="Removing pkg directory" />
+        <delete dir="pkg" includeemptydirs="true" />
+        <delete file="rpmbuild.err" />
+    </target>
+
+    <!-- TARGET: mkrpmdirs -->
+    <target name="mkrpmdirs">
+        <echo msg="Creating pkg directory" />
+        <mkdir dir="pkg"/>
+
+        <echo msg="Creating pkg/rpmbuild directory tree" />
+        <mkdir mode="0755" dir="pkg/rpmbuild" />
+        <mkdir mode="0755" dir="pkg/rpmbuild/BUILD" />
+        <mkdir mode="0755" dir="pkg/rpmbuild/RPMS" />
+        <mkdir mode="0755" dir="pkg/rpmbuild/SOURCES" />
+        <mkdir mode="0755" dir="pkg/rpmbuild/SPECS" />
+        <mkdir mode="0755" dir="pkg/rpmbuild/SRPMS" />
+    </target>
+
+    <!-- TARGET: checktags -->
+    <target name="checktags">
+        <gittag
+            gitPath="${gitpath}"
+            repository="${repoDir}"
+            list="true"
+            outputProperty="tags"/>
+        <if>
+            <contains string="${tags}" substring="${tagName}" />
+            <then>
+                <echo msg="${tagName} exists. Deleting..." />
+                <gittag
+                    gitPath="${gitpath}"
+                    repository="${repoDir}"
+                    name="${tagName}"
+                    delete="true" />
+            </then>
+        </if>
+    </target>
+
+    <!-- TARGET: gittag -->
+    <target name="gittag">
+        <echo msg="Tagging as ${tagName}" />
+
+        <gittag
+            gitPath="${gitpath}"
+            repository="${repoDir}"
+            name="${tagName}"
+            message="Version ${version}-${release}"
+            annotate="true"
+            force="true"/>
+
+        <echo msg="Pushing to Git repo..." />
+
+        <gitpush
+            gitPath="${gitpath}"
+            repository="${repoDir}"
+            refspec="${tagName}"
+            force="true" />
+    </target>
+
+    <!-- TARGET: gitfetch -->
+    <target name="gitfetch">
+        <echo msg="Fetching ${tagName} from Git to ${buildDir} directory" />
+
+        <gitclone
+            gitPath="${gitpath}"
+            repository="${repoDir}"
+            targetPath="${buildDir}"/>
+
+        <gitcheckout
+            gitPath="${gitpath}"
+            repository="${buildDir}"
+            branchname="tags/${tagName}"/>
+
+        <delete includeemptydirs="true">
+            <fileset dir="pkg/rpmbuild/BUILD">
+                <include name="build.*" />
+                <include name="*.spec" />
+                <include name="test/**" />
+            </fileset>
+        </delete>
+
+    </target>
+    
+    <!-- TARGET: writespecfile -->
+    <target name="writespecfile">
+        <echo msg="Writing _topdir RPM alias to pkg/rpmbuild/SPECS/build.spec" />
+        <exec command="echo '%define _topdir' `pwd`'/pkg/rpmbuild' > pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+        <exec command="echo '%define summary ${summary}' >> pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+        <exec command="echo '%define name ${appName}' >> pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+        <exec command="echo '%define release ${release}' >> pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+        <exec command="echo '%define version ${version}' >> pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+        <exec command="echo '%define release_name ${releaseName}' >> pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+
+        <echo msg="Appending build.spec into pkg/rpmbuild/SPECS/build.spec" />
+        <exec command="cat build.spec >> pkg/rpmbuild/SPECS/build.spec" checkreturn="true" />
+    </target>
+
+    <!-- TARGET: prep -->
+    <target name="prep" depends="clean">
+        <phingcall target="mkrpmdirs" />
+
+        <if>
+            <and>
+                <isset property="tag" />
+                <equals arg1="${tag}" arg2="true" casesensitive="false" />
+            </and>
+            <then>
+                <phingcall target="gittag"/>
+            </then>
+        </if>
+        
+        <if>
+            <and>
+                <isset property="git" />
+                <equals arg1="${git}" arg2="true" casesensitive="false" />
+            </and>
+            <then>
+                <phingcall target="gitfetch" />
+            </then>
+            <else>
+                <echo msg="Copying sandbox files to pkg/rpmbuild/BUILD directory" />
+                <copy todir="pkg/rpmbuild/BUILD">
+                    <fileset refid="packageFiles" />
+                </copy>
+            </else>
+        </if>
+        
+        <phingcall target="writespecfile"/>
+
+        <!-- Delete the build.xml and *.spec files before building
+        <delete file="pkg/rpmbuild/BUILD/build.xml" />
+        <delete file="pkg/rpmbuild/BUILD/build.spec" />
+        -->
+    </target>
+
+    <!-- TARGET: build -->
+    <target name="build" depends="clean,prep">
+
+        <echo msg="Executing our RPM build command" />
+        <exec command="rpmbuild -ba pkg/rpmbuild/SPECS/build.spec" checkreturn="true" error="rpmbuild.err"/>
+
+        <echo msg="Moving RPM(s) to pkg/" />
+        <exec command="mv pkg/rpmbuild/RPMS/*/*.rpm pkg/" checkreturn="true" error="build.err"/>
+
+        <echo msg="Removing pkg/rpmbuild/ directory" />
+        <delete dir="pkg/rpmbuild" />
+    </target>
+
+    <!--  TARGET: publish -->
+    <target name="publish" depends="build">
+        <echo msg="Publishing RPM"/>
+
+        <exec command="/usr/bin/scp -q pkg/${appName}-${version}-${release}.noarch.rpm ${yumServer}:/tmp"
+               checkreturn="true" passthru="true"/>
+         <exec command="/usr/bin/ssh -q ${yumServer} ${yumPublishExec} /tmp/${appName}-${version}-${release}.noarch.rpm ${yumRepo}"
+               checkreturn="true" passthru="true"/>
+    </target>
+
+</project>

@@ -1,0 +1,230 @@
+<!-- Note that the image id values are for UI testing purposes only -->
+
+<div class="col-xs-12 buildStatus status-row">
+    <table class="col-xs-12">
+        <tr>
+            <td class="col-xs-11">Building {{server.name}}:</td>
+            <td class="col-xs-1">&nbsp;</td>
+        </tr>
+        <tr ng-show="buildStatus.lookupCmdbCi.text">
+            <td class="col-xs-11">{{buildStatus.lookupCmdbCi.text}}</td>
+            <td class="col-xs-1">
+                <img id="lookup-cmdb-ci-img1" ng-show="buildStatus.lookupCmdbCi.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="lookup-cmdb-ci-img2" ng-show="buildStatus.lookupCmdbCi.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="lookup-cmdb-ci-img3" ng-show="buildStatus.lookupCmdbCi.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.getPoolServer.text">
+            <td class="col-xs-11">{{buildStatus.getPoolServer.text}}</td>
+            <td class="col-xs-1">
+                <img id="get-pool-server-img1" ng-show="buildStatus.getPoolServer.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="get-pool-server-img2" ng-show="buildStatus.getPoolServer.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="get-pool-server-img3" ng-show="buildStatus.getPoolServer.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.saving.text">
+            <td class="col-xs-11">{{buildStatus.saving.text}}</td>
+            <td class="col-xs-1">
+                <img id="save-server-img1" ng-show="buildStatus.saving.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="save-server-img2" ng-show="buildStatus.saving.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="save-server-img3" ng-show="buildStatus.saving.error" src="../../images/cloud_problem-128.png"
+                     width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.checkExisting.text">
+            <td class="col-xs-11">{{buildStatus.checkExisting.text}}</td>
+            <td class="col-xs-1">
+                <img id="check-existing-img1" ng-show="buildStatus.checkExisting.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="check-existing-img2" ng-show="buildStatus.checkExisting.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="check-existing-img3" ng-show="buildStatus.checkExisting.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.deleteVM.text">
+            <td class="col-xs-11">{{buildStatus.deleteVM.text}}</td>
+            <td class="col-xs-1">
+                <img id="delete-vm-img1" ng-show="buildStatus.deleteVM.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="delete-vm-img2" ng-show="buildStatus.deleteVM.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="delete-vm-img3" ng-show="buildStatus.deleteVM.error" src="../../images/cloud_problem-128.png"
+                     width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.chefDelete.text">
+            <td class="col-xs-11">{{buildStatus.chefDelete.text}}</td>
+            <td class="col-xs-1">
+                <img id="chef-delete-img1" ng-show="buildStatus.chefDelete.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="chef-delete-img2" ng-show="buildStatus.chefDelete.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="chef-delete-img3" ng-show="buildStatus.chefDelete.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.chefClientDelete.text">
+            <td class="col-xs-11">{{buildStatus.chefClientDelete.text}}</td>
+            <td class="col-xs-1">
+                <img id="chef-client-delete-img1" ng-show="buildStatus.chefClientDelete.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="chef-client-delete-img2" ng-show="buildStatus.chefClientDelete.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="chef-client-delete-img3" ng-show="buildStatus.chefClientDelete.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.gettingMac.text">
+            <td class="col-xs-11">{{buildStatus.gettingMac.text}}</td>
+            <td class="col-xs-1">
+                <img id="getting-mac-img1" ng-show="buildStatus.gettingMac.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="getting-mac-img2" ng-show="buildStatus.gettingMac.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="getting-mac-img3" ng-show="buildStatus.gettingMac.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.createVM.text">
+            <td class="col-xs-11">{{buildStatus.createVM.text}}</td>
+            <td class="col-xs-1">
+                <img id="create-vm-img1" ng-show="buildStatus.createVM.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="create-vm-img2" ng-show="buildStatus.createVM.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="create-vm-img3" ng-show="buildStatus.createVM.error" src="../../images/cloud_problem-128.png"
+                     width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.cobblerUpdate.text">
+            <td class="col-xs-11">{{buildStatus.cobblerUpdate.text}}</td>
+            <td class="col-xs-1">
+                <img id="update-cobbler-img1" ng-show="buildStatus.cobblerUpdate.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="update-cobbler-img2" ng-show="buildStatus.cobblerUpdate.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="update-cobbler-img3" ng-show="buildStatus.cobblerUpdate.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.createCmdbCi.text">
+            <td class="col-xs-11">{{buildStatus.createCmdbCi.text}}</td>
+            <td class="col-xs-1">
+                <img id="create-cmdb-img1" ng-show="buildStatus.createCmdbCi.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="create-cmdb-img2" ng-show="buildStatus.createCmdbCi.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="create-cmdb-img3" ng-show="buildStatus.createCmdbCi.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.makingCoffee.text">
+            <td class="col-xs-11">{{buildStatus.makingCoffee.text}}</td>
+            <td class="col-xs-1">
+                <img id="making-coffee-img1" ng-show="buildStatus.makingCoffee.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="making-coffee-img2" ng-show="buildStatus.makingCoffee.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="making-coffee-img3" ng-show="buildStatus.makingCoffee.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.ldapUpdate.text">
+            <td class="col-xs-11">{{buildStatus.ldapUpdate.text}}</td>
+            <td class="col-xs-1">
+                <img id="update-ldap-img1" ng-show="buildStatus.ldapUpdate.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="update-ldap-img2" ng-show="buildStatus.ldapUpdate.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="update-ldap-img3" ng-show="buildStatus.ldapUpdate.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.dnsUpdate.text">
+            <td class="col-xs-11">{{buildStatus.dnsUpdate.text}}</td>
+            <td class="col-xs-1">
+                <img id="update-dns-img1" ng-show="buildStatus.dnsUpdate.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="update-dns-img2" ng-show="buildStatus.dnsUpdate.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="update-dns-img3" ng-show="buildStatus.dnsUpdate.error" src="../../images/cloud_problem-128.png"
+                     width="30" height="30"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="col-xs-11">{{buildStatus.orderPizza.text}}</td>
+            <td class="col-xs-1">
+                <img id="ordering-pizza-img1" ng-show="buildStatus.orderPizza.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="ordering-pizza-img2" ng-show="buildStatus.orderPizza.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="ordering-pizza-img3" ng-show="buildStatus.orderPizza.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.powerOffVm.text">
+            <td class="col-xs-11">{{buildStatus.powerOffVm.text}}</td>
+            <td class="col-xs-1">
+                <img id="poweroff-vm-img1" ng-show="buildStatus.powerOffVm.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="poweroff-vm-img2" ng-show="buildStatus.powerOffVm.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="poweroff-vm-img3" ng-show="buildStatus.powerOffVm.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.setNetbootVM.text">
+            <td class="col-xs-11">{{buildStatus.setNetbootVM.text}}</td>
+            <td class="col-xs-1">
+                <img id="setnetboot-vm-img1" ng-show="buildStatus.setNetbootVM.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="setnetboot-vm-img2" ng-show="buildStatus.setNetbootVM.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="setnetboot-vm-img3" ng-show="buildStatus.setNetbootVM.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.powerOnVm.text">
+            <td class="col-xs-11">{{buildStatus.powerOnVm.text}}</td>
+            <td class="col-xs-1">
+                <img id="poweron-vm-img1" ng-show="buildStatus.powerOnVm.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="poweron-vm-img2" ng-show="buildStatus.powerOnVm.complete" src="../../images/cloud_ok-128.png"
+                     width="30" height="30"/>
+                <img id="poweron-vm-img3" ng-show="buildStatus.powerOnVm.error" src="../../images/cloud_problem-128.png"
+                     width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.resetSystem.text">
+            <td class="col-xs-11">{{buildStatus.resetSystem.text}}</td>
+            <td class="col-xs-1">
+                <img id="reset-system-img1" ng-show="buildStatus.resetSystem.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="reset-system-img2" ng-show="buildStatus.resetSystem.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="reset-system-img3" ng-show="buildStatus.resetSystem.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+        <tr ng-show="buildStatus.startWatcher.text">
+            <td class="col-xs-11">{{buildStatus.startWatcher.text}}</td>
+            <td class="col-xs-1">
+                <img id="cobbler-watcher-img1" ng-show="buildStatus.startWatcher.running" class="mask-spinner"
+                     src="../../images/spinner-clock-blue.gif" width="30" height="30"/>
+                <img id="cobbler-watcher-img2" ng-show="buildStatus.startWatcher.complete"
+                     src="../../images/cloud_ok-128.png" width="30" height="30"/>
+                <img id="cobbler-watcher-img3" ng-show="buildStatus.startWatcher.error"
+                     src="../../images/cloud_problem-128.png" width="30" height="30"/>
+            </td>
+        </tr>
+    </table>
+</div>
